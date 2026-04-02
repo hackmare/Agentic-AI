@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RO IT Systems</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --surface: rgba(255, 255, 255, 0.78);
+      --surface-strong: #ffffff;
+      --text: #13233f;
+      --muted: #5d6b85;
+      --line: rgba(19, 35, 63, 0.1);
+      --primary: #1f5fbf;
+      --primary-dark: #173f8f;
+      --accent: #79b7ff;
+      --hero-overlay: linear-gradient(135deg, rgba(9, 28, 61, 0.92), rgba(22, 71, 143, 0.78));
+      --shadow: 0 24px 60px rgba(16, 32, 67, 0.14);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 16px;
+      --max-width: 1200px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(121, 183, 255, 0.16), transparent 30%),
+        radial-gradient(circle at top right, rgba(31, 95, 191, 0.09), transparent 26%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    .container {
+      width: min(calc(100% - 2rem), var(--max-width));
+      margin: 0 auto;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      backdrop-filter: blur(18px);
+      background: rgba(245, 247, 251, 0.72);
+      border-bottom: 1px solid rgba(19, 35, 63, 0.06);
+    }
+
+    .nav {
+      min-height: 78px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      font-weight: 800;
+      font-size: 1.35rem;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      color: white;
+      font-size: 0.95rem;
+      font-weight: 800;
+      background: linear-gradient(145deg, var(--primary-dark), var(--primary));
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 12px 24px rgba(31, 95, 191, 0.28);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .nav-links a {
+      padding: 0.65rem 0.9rem;
+      border-radius: 999px;
+      transition: 180ms ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+      background: rgba(31, 95, 191, 0.08);
+    }
+
+    .button,
+    .button-outline {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      font-weight: 700;
+      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+      cursor: pointer;
+    }
+
+    .button {
+      padding: 0.95rem 1.35rem;
+      color: white;
+      background: linear-gradient(135deg, var(--primary), #3479df);
+      box-shadow: 0 16px 34px rgba(31, 95, 191, 0.24);
+    }
+
+    .button:hover,
+    .button-outline:hover {
+      transform: translateY(-1px);
+    }
+
+    .button-outline {
+      padding: 0.85rem 1.15rem;
+      border: 1px solid rgba(31, 95, 191, 0.18);
+      color: var(--primary-dark);
+      background: rgba(255, 255, 255, 0.72);
+    }
+
+    .hero {
+      padding: 3rem 0 2rem;
+    }
+
+    .hero-shell {
+      position: relative;
+      overflow: hidden;
+      border-radius: 36px;
+      min-height: 620px;
+      background:
+        var(--hero-overlay),
+        radial-gradient(circle at 75% 25%, rgba(121, 183, 255, 0.25), transparent 18%),
+        radial-gradient(circle at 85% 18%, rgba(255, 255, 255, 0.14), transparent 12%),
+        linear-gradient(180deg, #0d234b 0%, #173d79 55%, #1f5fbf 100%);
+      box-shadow: var(--shadow);
+      isolation: isolate;
+    }
+
+    .hero-shell::before,
+    .hero-shell::after {
+      content: "";
+      position: absolute;
+      inset: auto;
+      border-radius: 999px;
+      filter: blur(6px);
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    .hero-shell::before {
+      width: 420px;
+      height: 420px;
+      top: -80px;
+      right: -80px;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.22), transparent 65%);
+    }
+
+    .hero-shell::after {
+      width: 620px;
+      height: 200px;
+      left: -80px;
+      bottom: -60px;
+      background: radial-gradient(circle, rgba(121, 183, 255, 0.2), transparent 70%);
+    }
+
+    .grid-wave,
+    .cloud-orb,
+    .floating-card {
+      position: absolute;
+      pointer-events: none;
+    }
+
+    .grid-wave {
+      inset: auto 0 0 0;
+      height: 46%;
+      background:
+        linear-gradient(180deg, transparent, rgba(255,255,255,0.08)),
+        radial-gradient(circle at 10% 70%, rgba(255,255,255,0.14), transparent 8%),
+        radial-gradient(circle at 30% 78%, rgba(121,183,255,0.2), transparent 10%),
+        radial-gradient(circle at 60% 68%, rgba(255,255,255,0.12), transparent 8%),
+        radial-gradient(circle at 80% 72%, rgba(121,183,255,0.17), transparent 12%);
+      mask-image: linear-gradient(to top, black, transparent);
+      opacity: 0.95;
+    }
+
+    .grid-wave::before,
+    .grid-wave::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px);
+      background-size: 26px 26px;
+      transform: perspective(600px) rotateX(70deg) scale(1.8) translateY(40px);
+      transform-origin: bottom;
+      opacity: 0.18;
+    }
+
+    .grid-wave::after {
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.7), transparent);
+      height: 2px;
+      top: 66%;
+      transform: none;
+      opacity: 0.4;
+      filter: blur(0.5px);
+    }
+
+    .cloud-orb {
+      width: 360px;
+      height: 360px;
+      top: 52px;
+      right: 64px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 35% 35%, rgba(255,255,255,0.92), rgba(255,255,255,0.34) 35%, rgba(255,255,255,0.08) 62%, transparent 75%),
+        radial-gradient(circle at 65% 55%, rgba(121,183,255,0.22), transparent 55%);
+      filter: blur(1px);
+      opacity: 0.95;
+    }
+
+    .cloud-orb::before,
+    .cloud-orb::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.86), rgba(255,255,255,0.18) 60%, transparent 72%);
+    }
+
+    .cloud-orb::before {
+      width: 180px;
+      height: 180px;
+      left: -52px;
+      top: 78px;
+    }
+
+    .cloud-orb::after {
+      width: 130px;
+      height: 130px;
+      right: -22px;
+      top: 110px;
+    }
+
+    .floating-card {
+      padding: 0.9rem 1rem;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 18px;
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(12px);
+      color: rgba(255,255,255,0.95);
+      box-shadow: 0 18px 35px rgba(6, 18, 40, 0.22);
+    }
+
+    .floating-card small {
+      display: block;
+      color: rgba(255,255,255,0.72);
+      margin-bottom: 0.25rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .floating-card strong {
+      display: block;
+      font-size: 1rem;
+      letter-spacing: -0.02em;
+    }
+
+    .floating-a {
+      right: 100px;
+      bottom: 140px;
+      width: 230px;
+    }
+
+    .floating-b {
+      right: 360px;
+      top: 148px;
+      width: 180px;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      width: min(100%, 620px);
+      padding: 5rem 3rem;
+      color: white;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.45rem 0.85rem;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.92);
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+    }
+
+    h1, h2, h3, p {
+      margin-top: 0;
+    }
+
+    h1 {
+      font-size: clamp(2.6rem, 5vw, 4.4rem);
+      line-height: 1.02;
+      letter-spacing: -0.05em;
+      margin-bottom: 1rem;
+      max-width: 12ch;
+    }
+
+    .hero p {
+      font-size: 1.08rem;
+      max-width: 54ch;
+      color: rgba(255,255,255,0.84);
+      margin-bottom: 1.8rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.9rem;
+      margin-bottom: 2rem;
+    }
+
+    .hero-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.9rem;
+      max-width: 560px;
+    }
+
+    .metric {
+      padding: 1rem;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      backdrop-filter: blur(10px);
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 1.6rem;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      margin-bottom: 0.4rem;
+    }
+
+    .metric span {
+      color: rgba(255,255,255,0.76);
+      font-size: 0.92rem;
+    }
+
+    section {
+      padding: 5rem 0;
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .section-heading h2 {
+      font-size: clamp(2rem, 3vw, 2.9rem);
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-heading p {
+      color: var(--muted);
+      max-width: 52ch;
+      margin-bottom: 0;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.45rem 0.8rem;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.82rem;
+      color: var(--primary-dark);
+      background: rgba(31, 95, 191, 0.08);
+      border: 1px solid rgba(31, 95, 191, 0.1);
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.2rem;
+    }
+
+    .card {
+      background: var(--surface);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.75);
+      border-radius: var(--radius-lg);
+      padding: 1.4rem;
+      box-shadow: var(--shadow);
+    }
+
+    .service-card {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      min-height: 280px;
+    }
+
+    .service-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      color: var(--primary-dark);
+      background: linear-gradient(180deg, rgba(121,183,255,0.22), rgba(31,95,191,0.12));
+      border: 1px solid rgba(31, 95, 191, 0.12);
+    }
+
+    .service-icon svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    .service-card h3 {
+      font-size: 1.25rem;
+      margin-bottom: 0.4rem;
+      letter-spacing: -0.03em;
+    }
+
+    .service-card p {
+      color: var(--muted);
+      margin-bottom: 0;
+    }
+
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: auto;
+    }
+
+    .tag {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+      background: rgba(31, 95, 191, 0.08);
+      border: 1px solid rgba(31, 95, 191, 0.1);
+      padding: 0.42rem 0.65rem;
+      border-radius: 999px;
+    }
+
+    .results-wrap {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 1.2rem;
+      align-items: stretch;
+    }
+
+    .results-card {
+      padding: 1.8rem;
+    }
+
+    .results-card h3 {
+      font-size: 1.5rem;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.85rem;
+    }
+
+    .results-list {
+      display: grid;
+      gap: 0.95rem;
+      color: var(--muted);
+    }
+
+    .results-list strong {
+      color: var(--text);
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+      height: 100%;
+    }
+
+    .stat-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 180px;
+      text-align: left;
+    }
+
+    .stat-card strong {
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1;
+      letter-spacing: -0.05em;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-card span {
+      font-weight: 700;
+      margin-bottom: 0.45rem;
+    }
+
+    .stat-card p {
+      color: var(--muted);
+      margin-bottom: 0;
+      font-size: 0.95rem;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+      align-items: stretch;
+    }
+
+    .about-card {
+      padding: 1.8rem;
+    }
+
+    .about-card h3 {
+      font-size: 1.4rem;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.8rem;
+    }
+
+    .about-points {
+      display: grid;
+      gap: 0.9rem;
+      color: var(--muted);
+    }
+
+    .about-points div {
+      padding: 0.95rem 1rem;
+      border-radius: 16px;
+      background: rgba(31, 95, 191, 0.05);
+      border: 1px solid rgba(31, 95, 191, 0.08);
+    }
+
+    .about-points strong {
+      display: block;
+      color: var(--text);
+      margin-bottom: 0.2rem;
+    }
+
+    .insights-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.2rem;
+    }
+
+    .insight-card {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      min-height: 240px;
+    }
+
+    .insight-card time {
+      color: var(--muted);
+      font-size: 0.86rem;
+      font-weight: 700;
+    }
+
+    .insight-card h3 {
+      font-size: 1.2rem;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.3rem;
+    }
+
+    .insight-card p {
+      color: var(--muted);
+      margin-bottom: 0;
+    }
+
+    .insight-link {
+      margin-top: auto;
+      font-weight: 700;
+      color: var(--primary-dark);
+    }
+
+    .cta {
+      padding-bottom: 6rem;
+    }
+
+    .cta-shell {
+      position: relative;
+      overflow: hidden;
+      border-radius: 32px;
+      background: linear-gradient(135deg, #0f264f, #1f5fbf 68%, #76b5ff);
+      color: white;
+      padding: 2.4rem;
+      box-shadow: var(--shadow);
+    }
+
+    .cta-shell::before,
+    .cta-shell::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      pointer-events: none;
+    }
+
+    .cta-shell::before {
+      width: 280px;
+      height: 280px;
+      right: -40px;
+      top: -80px;
+    }
+
+    .cta-shell::after {
+      width: 200px;
+      height: 200px;
+      left: -40px;
+      bottom: -70px;
+    }
+
+    .cta-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .cta h2 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.04;
+      letter-spacing: -0.05em;
+      margin-bottom: 0.7rem;
+      max-width: 14ch;
+    }
+
+    .cta p {
+      color: rgba(255,255,255,0.82);
+      margin-bottom: 0;
+      max-width: 50ch;
+    }
+
+    .site-footer {
+      padding: 1.5rem 0 2.75rem;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .footer-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--line);
+      padding-top: 1.4rem;
+    }
+
+    @media (max-width: 1080px) {
+      .services-grid,
+      .insights-grid,
+      .results-wrap,
+      .about-grid,
+      .cta-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .cloud-orb,
+      .floating-card {
+        opacity: 0.55;
+      }
+    }
+
+    @media (max-width: 860px) {
+      .nav {
+        flex-wrap: wrap;
+        padding: 0.75rem 0;
+      }
+
+      .nav-links {
+        width: 100%;
+        justify-content: space-between;
+        flex-wrap: wrap;
+      }
+
+      .hero-shell {
+        min-height: auto;
+      }
+
+      .hero-content {
+        width: 100%;
+        padding: 3rem 1.5rem 2.5rem;
+      }
+
+      .hero-metrics,
+      .services-grid,
+      .insights-grid,
+      .stat-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .cloud-orb,
+      .floating-card {
+        display: none;
+      }
+
+      section {
+        padding: 4rem 0;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .container {
+        width: min(calc(100% - 1rem), var(--max-width));
+      }
+
+      .hero {
+        padding-top: 1.25rem;
+      }
+
+      .hero-content {
+        padding: 2.4rem 1.1rem 2rem;
+      }
+
+      .section-heading {
+        align-items: start;
+        flex-direction: column;
+      }
+
+      .card,
+      .results-card,
+      .about-card,
+      .cta-shell {
+        padding: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="#top" aria-label="RO IT Systems home">
+        <span class="brand-mark">RO</span>
+        <span>RO IT Systems</span>
+      </a>
+
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="#services">Services</a>
+        <a href="#results">Results</a>
+        <a href="#about">About</a>
+        <a href="#insights">Insights</a>
+        <a class="button-outline" href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="container">
+        <div class="hero-shell">
+          <div class="cloud-orb" aria-hidden="true"></div>
+          <div class="grid-wave" aria-hidden="true"></div>
+          <div class="floating-card floating-a" aria-hidden="true">
+            <small>Consulting Focus</small>
+            <strong>AI, Architecture, Governance</strong>
+          </div>
+          <div class="floating-card floating-b" aria-hidden="true">
+            <small>Built For</small>
+            <strong>Regulated Enterprises</strong>
+          </div>
+
+          <div class="hero-content">
+            <div class="eyebrow">Enterprise transformation consulting</div>
+            <h1>Modern consulting for complex technology change.</h1>
+            <p>
+              RO IT Systems helps organizations design resilient platforms, operationalize AI,
+              align governance with delivery, and move critical systems from strategy to execution.
+            </p>
+
+            <div class="hero-actions">
+              <a class="button" href="#contact">Book a consultation</a>
+              <a class="button-outline" href="#services">Explore services</a>
+            </div>
+
+            <div class="hero-metrics" aria-label="Key metrics">
+              <div class="metric">
+                <strong>AI</strong>
+                <span>Practical implementation and governance</span>
+              </div>
+              <div class="metric">
+                <strong>Risk</strong>
+                <span>Compliance-aware architecture decisions</span>
+              </div>
+              <div class="metric">
+                <strong>Scale</strong>
+                <span>Cloud, data, integration, and operating model design</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="services">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <div class="pill">Core consulting skills</div>
+            <h2>Services built around enterprise transformation.</h2>
+            <p>
+              From platform modernization to AI operating models, the practice is oriented around
+              solving high-stakes technology problems where architecture, governance, and execution must work together.
+            </p>
+          </div>
+        </div>
+
+        <div class="services-grid">
+          <article class="card service-card">
+            <div class="service-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M3 19h18"/>
+                <path d="M5 19V9l7-4 7 4v10"/>
+                <path d="M9 19v-4h6v4"/>
+              </svg>
+            </div>
+            <div>
+              <h3>Enterprise Architecture &amp; Platform Strategy</h3>
+              <p>
+                Design future-state architecture for data, integration, and cloud platforms with a clear line from business priorities to implementation.
+              </p>
+            </div>
+            <div class="tag-list">
+              <span class="tag">Target architecture</span>
+              <span class="tag">Modernization roadmaps</span>
+              <span class="tag">Cloud platforms</span>
+            </div>
+          </article>
+
+          <article class="card service-card">
+            <div class="service-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M12 3l7 4v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V7l7-4Z"/>
+                <path d="M9.5 12.5l1.7 1.7 3.6-4.2"/>
+              </svg>
+            </div>
+            <div>
+              <h3>Regulatory &amp; Risk-Aligned Design</h3>
+              <p>
+                Build systems and delivery approaches that account for privacy, residency, auditability, third-party risk, and sector-specific controls.
+              </p>
+            </div>
+            <div class="tag-list">
+              <span class="tag">Risk controls</span>
+              <span class="tag">Data governance</span>
+              <span class="tag">Audit readiness</span>
+            </div>
+          </article>
+
+          <article class="card service-card">
+            <div class="service-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6 1.7 1.7 0 0 1-2 0 1.7 1.7 0 0 0-1-.6 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-.6-1 1.7 1.7 0 0 1 0-2 1.7 1.7 0 0 0 .6-1 1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-.6 1.7 1.7 0 0 1 2 0 1.7 1.7 0 0 0 1 .6 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.4 9c.26.31.47.66.6 1a1.7 1.7 0 0 1 0 2c-.13.34-.34.69-.6 1Z"/>
+              </svg>
+            </div>
+            <div>
+              <h3>AI Strategy &amp; Applied Implementation</h3>
+              <p>
+                Translate AI ambition into concrete operating models, use cases, controls, and technical patterns that can be adopted responsibly.
+              </p>
+            </div>
+            <div class="tag-list">
+              <span class="tag">GenAI strategy</span>
+              <span class="tag">RAG use cases</span>
+              <span class="tag">Operating models</span>
+            </div>
+          </article>
+
+          <article class="card service-card">
+            <div class="service-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <rect x="3" y="4" width="7" height="7" rx="1.5"/>
+                <rect x="14" y="4" width="7" height="7" rx="1.5"/>
+                <rect x="14" y="13" width="7" height="7" rx="1.5"/>
+                <path d="M10 7.5h4"/>
+                <path d="M17.5 11v2"/>
+                <path d="M7 11v4a2 2 0 0 0 2 2h5"/>
+              </svg>
+            </div>
+            <div>
+              <h3>Complex Systems Integration</h3>
+              <p>
+                Connect and rationalize heterogeneous ecosystems across APIs, ETL, event streams, data platforms, and legacy services.
+              </p>
+            </div>
+            <div class="tag-list">
+              <span class="tag">Integration patterns</span>
+              <span class="tag">Migration planning</span>
+              <span class="tag">Platform interoperability</span>
+            </div>
+          </article>
+
+          <article class="card service-card">
+            <div class="service-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M4 20V8"/>
+                <path d="M12 20V4"/>
+                <path d="M20 20v-6"/>
+                <path d="M2 20h20"/>
+              </svg>
+            </div>
+            <div>
+              <h3>Operating Model &amp; Governance Design</h3>
+              <p>
+                Define decision rights, delivery structures, intake processes, and governance rhythms that allow teams to move faster with accountability.
+              </p>
+            </div>
+            <div class="tag-list">
+              <span class="tag">Decision rights</span>
+              <span class="tag">DevOps transition</span>
+              <span class="tag">Portfolio intake</span>
+            </div>
+          </article>
+
+          <article class="card service-card">
+            <div class="service-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M21 15a2 2 0 0 1-2 2H8l-5 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/>
+                <path d="M8 9h8"/>
+                <path d="M8 13h5"/>
+              </svg>
+            </div>
+            <div>
+              <h3>Strategic Communication &amp; Stakeholder Alignment</h3>
+              <p>
+                Support executive, board, and cross-functional alignment with clear narratives, risk framing, and decision-ready communications.
+              </p>
+            </div>
+            <div class="tag-list">
+              <span class="tag">Executive advisory</span>
+              <span class="tag">Board communications</span>
+              <span class="tag">Transformation narratives</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="results">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <div class="pill">Outcome oriented</div>
+            <h2>Consulting designed to move from analysis to delivery.</h2>
+            <p>
+              The focus is not on slideware alone. Engagements are structured to produce decisions, roadmaps, implementation direction, and measurable execution momentum.
+            </p>
+          </div>
+        </div>
+
+        <div class="results-wrap">
+          <article class="card results-card">
+            <h3>What clients typically need</h3>
+            <div class="results-list">
+              <div><strong>Clarity.</strong> A realistic target state for platforms, AI, and governance.</div>
+              <div><strong>Control.</strong> Architecture choices that hold up under operational and regulatory scrutiny.</div>
+              <div><strong>Execution.</strong> A delivery path that teams can actually sustain.</div>
+              <div><strong>Alignment.</strong> Shared understanding between technology, business, risk, and leadership stakeholders.</div>
+            </div>
+          </article>
+
+          <div class="stat-grid">
+            <article class="card stat-card">
+              <strong>01</strong>
+              <span>Strategy</span>
+              <p>Define the problem, future state, and constraints.</p>
+            </article>
+            <article class="card stat-card">
+              <strong>02</strong>
+              <span>Architecture</span>
+              <p>Design pragmatic patterns, controls, and platform decisions.</p>
+            </article>
+            <article class="card stat-card">
+              <strong>03</strong>
+              <span>Governance</span>
+              <p>Set decision rights, intake, and accountability rhythms.</p>
+            </article>
+            <article class="card stat-card">
+              <strong>04</strong>
+              <span>Delivery</span>
+              <p>Translate direction into roadmaps, execution, and adoption.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <div class="pill">Why RO IT Systems</div>
+            <h2>A consulting practice centered on high-stakes technology environments.</h2>
+            <p>
+              RO IT Systems is positioned for organizations navigating modernization, AI adoption, platform complexity, and governance demands at the same time.
+            </p>
+          </div>
+        </div>
+
+        <div class="about-grid">
+          <article class="card about-card">
+            <h3>Advisory posture</h3>
+            <div class="about-points">
+              <div>
+                <strong>Executive level framing</strong>
+                Translate technical complexity into decision-ready guidance for leaders and boards.
+              </div>
+              <div>
+                <strong>Hands-on technical depth</strong>
+                Ground recommendations in real platform, integration, and delivery experience.
+              </div>
+              <div>
+                <strong>Governance-aware execution</strong>
+                Design change that is sustainable under operational, legal, and compliance pressure.
+              </div>
+            </div>
+          </article>
+
+          <article class="card about-card">
+            <h3>Ideal engagements</h3>
+            <div class="about-points">
+              <div>
+                <strong>Platform modernization</strong>
+                Legacy data, integration, and architecture transformation with clear sequencing.
+              </div>
+              <div>
+                <strong>AI adoption roadmaps</strong>
+                Responsible AI strategy, use case selection, governance, and implementation patterns.
+              </div>
+              <div>
+                <strong>Regulated operating models</strong>
+                Delivery structures and architecture decisions for environments with high trust requirements.
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="insights">
+      <div class="container">
+        <div class="section-heading">
+          <div>
+            <div class="pill">Insights</div>
+            <h2>Topics that matter to modern technology leaders.</h2>
+            <p>
+              Thought leadership areas that fit the practice: AI governance, platform modernization, delivery operating models, and risk-aware enterprise transformation.
+            </p>
+          </div>
+        </div>
+
+        <div class="insights-grid">
+          <article class="card insight-card">
+            <time datetime="2026-04">April 2026</time>
+            <div>
+              <h3>What responsible enterprise AI adoption actually requires</h3>
+              <p>How to move beyond pilots toward practical controls, data boundaries, and operating disciplines.</p>
+            </div>
+            <a class="insight-link" href="#contact">Discuss this topic</a>
+          </article>
+
+          <article class="card insight-card">
+            <time datetime="2026-04">April 2026</time>
+            <div>
+              <h3>Modernizing data and integration without creating delivery chaos</h3>
+              <p>Sequencing architecture and operating model changes so platform transformation stays usable for delivery teams.</p>
+            </div>
+            <a class="insight-link" href="#contact">Discuss this topic</a>
+          </article>
+
+          <article class="card insight-card">
+            <time datetime="2026-04">April 2026</time>
+            <div>
+              <h3>Governance that accelerates execution instead of slowing it down</h3>
+              <p>Designing decision rights and review structures that support speed, clarity, and accountability together.</p>
+            </div>
+            <a class="insight-link" href="#contact">Discuss this topic</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta" id="contact">
+      <div class="container">
+        <div class="cta-shell">
+          <div class="cta-grid">
+            <div>
+              <h2>Need help shaping a complex transformation?</h2>
+              <p>
+                RO IT Systems provides strategic and implementation-focused consulting for organizations navigating AI, platform modernization, enterprise integration, and governance-heavy change.
+              </p>
+            </div>
+            <div>
+              <a class="button" href="mailto:contact@roitsystems.example">Start a conversation</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-row">
+      <div>© 2026 RO IT Systems. All rights reserved.</div>
+      <div>Enterprise architecture • AI strategy • governance • systems integration</div>
+    </div>
+  </footer>
+</body>
+</html>
