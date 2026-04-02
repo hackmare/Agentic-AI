@@ -1,0 +1,488 @@
+import React from "react";
+import { motion } from "framer-motion";
+import {
+  ArrowRight,
+  Bot,
+  Building2,
+  ChartColumnBig,
+  MessageSquareText,
+  Network,
+  ShieldCheck,
+} from "lucide-react";
+
+const services = [
+  {
+    icon: Building2,
+    title: "Enterprise Architecture & Platform Strategy",
+    description:
+      "Design future-state architecture for data, integration, and cloud platforms with a clear line from business priorities to implementation.",
+    tags: ["Target architecture", "Modernization roadmaps", "Cloud platforms"],
+  },
+  {
+    icon: ShieldCheck,
+    title: "Regulatory & Risk-Aligned Design",
+    description:
+      "Build systems and delivery approaches that account for privacy, residency, auditability, third-party risk, and sector-specific controls.",
+    tags: ["Risk controls", "Data governance", "Audit readiness"],
+  },
+  {
+    icon: Bot,
+    title: "AI Strategy & Applied Implementation",
+    description:
+      "Translate AI ambition into concrete operating models, use cases, controls, and technical patterns that can be adopted responsibly.",
+    tags: ["GenAI strategy", "RAG use cases", "Operating models"],
+  },
+  {
+    icon: Network,
+    title: "Complex Systems Integration",
+    description:
+      "Connect and rationalize heterogeneous ecosystems across APIs, ETL, event streams, data platforms, and legacy services.",
+    tags: ["Integration patterns", "Migration planning", "Interoperability"],
+  },
+  {
+    icon: ChartColumnBig,
+    title: "Operating Model & Governance Design",
+    description:
+      "Define decision rights, delivery structures, intake processes, and governance rhythms that allow teams to move faster with accountability.",
+    tags: ["Decision rights", "DevOps transition", "Portfolio intake"],
+  },
+  {
+    icon: MessageSquareText,
+    title: "Strategic Communication & Stakeholder Alignment",
+    description:
+      "Support executive, board, and cross-functional alignment with clear narratives, risk framing, and decision-ready communications.",
+    tags: ["Executive advisory", "Board communications", "Transformation narratives"],
+  },
+];
+
+const insights = [
+  {
+    date: "April 2026",
+    title: "What responsible enterprise AI adoption actually requires",
+    description:
+      "How to move beyond pilots toward practical controls, data boundaries, and operating disciplines.",
+  },
+  {
+    date: "April 2026",
+    title: "Modernizing data and integration without creating delivery chaos",
+    description:
+      "Sequencing architecture and operating model changes so platform transformation stays usable for delivery teams.",
+  },
+  {
+    date: "April 2026",
+    title: "Governance that accelerates execution instead of slowing it down",
+    description:
+      "Designing decision rights and review structures that support speed, clarity, and accountability together.",
+  },
+];
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 24 },
+  show: { opacity: 1, y: 0 },
+};
+
+function Pill({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="inline-flex items-center rounded-full border border-blue-200/60 bg-blue-100/60 px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-blue-900">
+      {children}
+    </div>
+  );
+}
+
+function SectionHeading({
+  pill,
+  title,
+  description,
+}: {
+  pill: string;
+  title: string;
+  description: string;
+}) {
+  return (
+    <div className="mb-10 flex flex-col gap-4">
+      <div>
+        <Pill>{pill}</Pill>
+        <h2 className="mt-4 max-w-4xl text-3xl font-semibold tracking-tight text-slate-950 md:text-5xl">
+          {title}
+        </h2>
+        <p className="mt-4 max-w-3xl text-base leading-7 text-slate-600 md:text-lg">
+          {description}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function ServiceCard({
+  icon: Icon,
+  title,
+  description,
+  tags,
+}: {
+  icon: React.ComponentType<{ className?: string }>;
+  title: string;
+  description: string;
+  tags: string[];
+}) {
+  return (
+    <motion.div
+      variants={fadeUp}
+      className="group rounded-3xl border border-white/70 bg-white/80 p-6 shadow-[0_20px_60px_rgba(15,23,42,0.08)] backdrop-blur"
+    >
+      <div className="flex h-full flex-col">
+        <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl border border-blue-200/60 bg-gradient-to-b from-blue-100 to-blue-50 text-blue-900">
+          <Icon className="h-7 w-7" />
+        </div>
+        <h3 className="text-xl font-semibold tracking-tight text-slate-950">{title}</h3>
+        <p className="mt-3 text-sm leading-6 text-slate-600 md:text-base">{description}</p>
+        <div className="mt-6 flex flex-wrap gap-2">
+          {tags.map((tag) => (
+            <span
+              key={tag}
+              className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+export default function RoITSystemsHomepage() {
+  return (
+    <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,rgba(147,197,253,0.22),transparent_28%),radial-gradient(circle_at_top_right,rgba(59,130,246,0.10),transparent_24%),#f8fafc] text-slate-900">
+      <header className="sticky top-0 z-50 border-b border-slate-200/70 bg-white/70 backdrop-blur-xl">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
+          <div className="flex items-center gap-3">
+            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-blue-900 to-blue-600 text-sm font-bold text-white shadow-lg shadow-blue-500/20">
+              RO
+            </div>
+            <div>
+              <div className="text-lg font-semibold tracking-tight">RO IT Systems</div>
+              <div className="text-sm text-slate-500">Enterprise transformation consulting</div>
+            </div>
+          </div>
+
+          <nav className="hidden items-center gap-2 md:flex">
+            {[
+              ["Services", "#services"],
+              ["Results", "#results"],
+              ["About", "#about"],
+              ["Insights", "#insights"],
+            ].map(([label, href]) => (
+              <a
+                key={label}
+                href={href}
+                className="rounded-full px-4 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-950"
+              >
+                {label}
+              </a>
+            ))}
+            <a
+              href="#contact"
+              className="ml-2 rounded-full border border-blue-200 bg-white px-4 py-2 text-sm font-semibold text-blue-900 shadow-sm transition hover:-translate-y-0.5"
+            >
+              Contact
+            </a>
+          </nav>
+        </div>
+      </header>
+
+      <main>
+        <section className="px-4 pb-8 pt-6 sm:px-6 lg:px-8 lg:pt-10">
+          <div className="mx-auto max-w-7xl overflow-hidden rounded-[2rem] border border-white/40 bg-gradient-to-br from-slate-950 via-blue-950 to-blue-600 shadow-[0_30px_100px_rgba(15,23,42,0.18)]">
+            <div className="relative grid min-h-[680px] items-center lg:grid-cols-[1.1fr_0.9fr]">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_78%_22%,rgba(255,255,255,0.28),transparent_14%),radial-gradient(circle_at_83%_28%,rgba(191,219,254,0.18),transparent_24%),linear-gradient(to_top,rgba(255,255,255,0.06),transparent_30%)]" />
+              <div className="absolute bottom-0 left-0 right-0 h-72 bg-[linear-gradient(to_top,rgba(255,255,255,0.06),transparent),linear-gradient(rgba(255,255,255,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.08)_1px,transparent_1px)] [background-size:auto,26px_26px,26px_26px] opacity-30 [transform:perspective(600px)_rotateX(74deg)_scale(1.8)_translateY(55px)] origin-bottom" />
+              <div className="absolute right-10 top-10 hidden h-80 w-80 rounded-full bg-[radial-gradient(circle_at_35%_35%,rgba(255,255,255,0.95),rgba(255,255,255,0.34)_36%,rgba(255,255,255,0.08)_62%,transparent_74%)] opacity-90 blur-[1px] lg:block" />
+              <div className="absolute right-24 top-40 hidden rounded-3xl border border-white/15 bg-white/10 px-5 py-4 text-white/90 shadow-2xl backdrop-blur-md lg:block">
+                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/60">Built for</div>
+                <div className="mt-1 text-base font-semibold">Regulated enterprises</div>
+              </div>
+              <div className="absolute bottom-28 right-16 hidden rounded-3xl border border-white/15 bg-white/10 px-5 py-4 text-white/90 shadow-2xl backdrop-blur-md lg:block">
+                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/60">Consulting focus</div>
+                <div className="mt-1 text-base font-semibold">AI, architecture, governance</div>
+              </div>
+
+              <motion.div
+                initial="hidden"
+                animate="show"
+                variants={{ show: { transition: { staggerChildren: 0.12 } } }}
+                className="relative z-10 px-6 py-12 sm:px-10 md:px-12 lg:px-16"
+              >
+                <motion.div
+                  variants={fadeUp}
+                  className="inline-flex items-center rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white/85"
+                >
+                  Modern consulting for complex technology change
+                </motion.div>
+
+                <motion.h1
+                  variants={fadeUp}
+                  className="mt-6 max-w-3xl text-4xl font-semibold tracking-tight text-white sm:text-5xl lg:text-7xl"
+                >
+                  RO IT Systems helps organizations turn complexity into momentum.
+                </motion.h1>
+
+                <motion.p
+                  variants={fadeUp}
+                  className="mt-6 max-w-2xl text-base leading-7 text-white/78 sm:text-lg"
+                >
+                  Consulting for enterprise architecture, AI implementation, governance design,
+                  and complex systems integration in environments where resilience, clarity,
+                  and execution all matter.
+                </motion.p>
+
+                <motion.div variants={fadeUp} className="mt-8 flex flex-wrap gap-3">
+                  <a
+                    href="#contact"
+                    className="inline-flex items-center justify-center rounded-full bg-white px-5 py-3 text-sm font-semibold text-blue-950 shadow-xl transition hover:-translate-y-0.5"
+                  >
+                    Book a consultation
+                  </a>
+                  <a
+                    href="#services"
+                    className="inline-flex items-center justify-center rounded-full border border-white/20 bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur transition hover:-translate-y-0.5"
+                  >
+                    Explore services
+                  </a>
+                </motion.div>
+
+                <motion.div
+                  variants={fadeUp}
+                  className="mt-10 grid gap-3 sm:grid-cols-3"
+                >
+                  {[
+                    ["AI", "Practical implementation and governance"],
+                    ["Risk", "Compliance-aware architecture decisions"],
+                    ["Scale", "Cloud, data, integration, and operating model design"],
+                  ].map(([title, desc]) => (
+                    <div
+                      key={title}
+                      className="rounded-3xl border border-white/15 bg-white/10 p-4 text-white backdrop-blur-md"
+                    >
+                      <div className="text-2xl font-semibold tracking-tight">{title}</div>
+                      <div className="mt-2 text-sm leading-6 text-white/72">{desc}</div>
+                    </div>
+                  ))}
+                </motion.div>
+              </motion.div>
+
+              <div className="relative hidden h-full lg:block" />
+            </div>
+          </div>
+        </section>
+
+        <section id="services" className="px-4 py-16 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-7xl">
+            <SectionHeading
+              pill="Core consulting skills"
+              title="Services built around enterprise transformation."
+              description="From platform modernization to AI operating models, the practice is oriented around solving high-stakes technology problems where architecture, governance, and execution must work together."
+            />
+
+            <motion.div
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, amount: 0.15 }}
+              variants={{ show: { transition: { staggerChildren: 0.08 } } }}
+              className="grid gap-5 md:grid-cols-2 xl:grid-cols-3"
+            >
+              {services.map((service) => (
+                <ServiceCard key={service.title} {...service} />
+              ))}
+            </motion.div>
+          </div>
+        </section>
+
+        <section id="results" className="px-4 py-16 sm:px-6 lg:px-8">
+          <div className="mx-auto grid max-w-7xl gap-5 lg:grid-cols-[1.15fr_0.85fr]">
+            <div>
+              <SectionHeading
+                pill="Outcome oriented"
+                title="Consulting designed to move from analysis to delivery."
+                description="The focus is not on slideware alone. Engagements are structured to produce decisions, roadmaps, implementation direction, and measurable execution momentum."
+              />
+
+              <div className="rounded-[2rem] border border-white/70 bg-white/80 p-7 shadow-[0_20px_60px_rgba(15,23,42,0.08)] backdrop-blur">
+                <h3 className="text-2xl font-semibold tracking-tight text-slate-950">
+                  What clients typically need
+                </h3>
+                <div className="mt-6 grid gap-4 text-slate-600">
+                  {[
+                    ["Clarity.", "A realistic target state for platforms, AI, and governance."],
+                    ["Control.", "Architecture choices that hold up under operational and regulatory scrutiny."],
+                    ["Execution.", "A delivery path that teams can actually sustain."],
+                    ["Alignment.", "Shared understanding between technology, business, risk, and leadership stakeholders."],
+                  ].map(([lead, text]) => (
+                    <div key={lead} className="rounded-2xl border border-slate-200 bg-slate-50/80 p-4">
+                      <span className="font-semibold text-slate-950">{lead} </span>
+                      {text}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="grid gap-5 self-end sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+              {[
+                ["01", "Strategy", "Define the problem, future state, and constraints."],
+                ["02", "Architecture", "Design pragmatic patterns, controls, and platform decisions."],
+                ["03", "Governance", "Set decision rights, intake, and accountability rhythms."],
+                ["04", "Delivery", "Translate direction into roadmaps, execution, and adoption."],
+              ].map(([num, title, text]) => (
+                <div
+                  key={num}
+                  className="flex min-h-[210px] flex-col justify-center rounded-[2rem] border border-white/70 bg-white/80 p-7 shadow-[0_20px_60px_rgba(15,23,42,0.08)] backdrop-blur"
+                >
+                  <div className="text-4xl font-semibold tracking-tight text-slate-950">{num}</div>
+                  <div className="mt-3 text-lg font-semibold text-slate-900">{title}</div>
+                  <p className="mt-2 text-sm leading-6 text-slate-600">{text}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="about" className="px-4 py-16 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-7xl">
+            <SectionHeading
+              pill="Why RO IT Systems"
+              title="A consulting practice centered on high-stakes technology environments."
+              description="RO IT Systems is positioned for organizations navigating modernization, AI adoption, platform complexity, and governance demands at the same time."
+            />
+
+            <div className="grid gap-5 lg:grid-cols-2">
+              {[
+                {
+                  title: "Advisory posture",
+                  items: [
+                    [
+                      "Executive level framing",
+                      "Translate technical complexity into decision-ready guidance for leaders and boards.",
+                    ],
+                    [
+                      "Hands-on technical depth",
+                      "Ground recommendations in real platform, integration, and delivery experience.",
+                    ],
+                    [
+                      "Governance-aware execution",
+                      "Design change that is sustainable under operational, legal, and compliance pressure.",
+                    ],
+                  ],
+                },
+                {
+                  title: "Ideal engagements",
+                  items: [
+                    [
+                      "Platform modernization",
+                      "Legacy data, integration, and architecture transformation with clear sequencing.",
+                    ],
+                    [
+                      "AI adoption roadmaps",
+                      "Responsible AI strategy, use case selection, governance, and implementation patterns.",
+                    ],
+                    [
+                      "Regulated operating models",
+                      "Delivery structures and architecture decisions for environments with high trust requirements.",
+                    ],
+                  ],
+                },
+              ].map((column) => (
+                <div
+                  key={column.title}
+                  className="rounded-[2rem] border border-white/70 bg-white/80 p-7 shadow-[0_20px_60px_rgba(15,23,42,0.08)] backdrop-blur"
+                >
+                  <h3 className="text-2xl font-semibold tracking-tight text-slate-950">
+                    {column.title}
+                  </h3>
+                  <div className="mt-6 grid gap-4">
+                    {column.items.map(([title, text]) => (
+                      <div
+                        key={title}
+                        className="rounded-2xl border border-blue-100 bg-blue-50/50 p-4"
+                      >
+                        <div className="font-semibold text-slate-950">{title}</div>
+                        <p className="mt-1 text-sm leading-6 text-slate-600">{text}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="insights" className="px-4 py-16 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-7xl">
+            <SectionHeading
+              pill="Insights"
+              title="Topics that matter to modern technology leaders."
+              description="Thought leadership areas that fit the practice: AI governance, platform modernization, delivery operating models, and risk-aware enterprise transformation."
+            />
+
+            <div className="grid gap-5 lg:grid-cols-3">
+              {insights.map((item) => (
+                <motion.article
+                  key={item.title}
+                  whileHover={{ y: -4 }}
+                  className="flex min-h-[260px] flex-col rounded-[2rem] border border-white/70 bg-white/80 p-7 shadow-[0_20px_60px_rgba(15,23,42,0.08)] backdrop-blur"
+                >
+                  <div className="text-sm font-semibold text-slate-500">{item.date}</div>
+                  <h3 className="mt-4 text-xl font-semibold tracking-tight text-slate-950">
+                    {item.title}
+                  </h3>
+                  <p className="mt-3 text-sm leading-6 text-slate-600 md:text-base">
+                    {item.description}
+                  </p>
+                  <a
+                    href="#contact"
+                    className="mt-auto inline-flex items-center gap-2 pt-6 text-sm font-semibold text-blue-900"
+                  >
+                    Discuss this topic <ArrowRight className="h-4 w-4" />
+                  </a>
+                </motion.article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="contact" className="px-4 pb-20 pt-10 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-7xl overflow-hidden rounded-[2rem] bg-gradient-to-br from-slate-950 via-blue-900 to-blue-500 p-8 text-white shadow-[0_30px_100px_rgba(15,23,42,0.18)] sm:p-10 lg:p-12">
+            <div className="grid items-center gap-8 lg:grid-cols-[1fr_auto]">
+              <div>
+                <Pill>Contact</Pill>
+                <h2 className="mt-4 max-w-3xl text-3xl font-semibold tracking-tight text-white md:text-5xl">
+                  Need help shaping a complex transformation?
+                </h2>
+                <p className="mt-4 max-w-2xl text-base leading-7 text-white/80 md:text-lg">
+                  RO IT Systems provides strategic and implementation-focused consulting for
+                  organizations navigating AI, platform modernization, enterprise integration,
+                  and governance-heavy change.
+                </p>
+              </div>
+
+              <div className="flex flex-wrap gap-3">
+                <a
+                  href="mailto:contact@roitsystems.example"
+                  className="inline-flex items-center justify-center rounded-full bg-white px-5 py-3 text-sm font-semibold text-blue-950 shadow-xl transition hover:-translate-y-0.5"
+                >
+                  Start a conversation
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer className="px-4 pb-8 sm:px-6 lg:px-8">
+        <div className="mx-auto flex max-w-7xl flex-col gap-3 border-t border-slate-200 py-6 text-sm text-slate-500 md:flex-row md:items-center md:justify-between">
+          <div>© 2026 RO IT Systems. All rights reserved.</div>
+          <div>Enterprise architecture • AI strategy • governance • systems integration</div>
+        </div>
+      </footer>
+    </div>
+  );
+}
