@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RO IT Systems</title>
+  <meta name="description" content="RO IT Systems consulting for enterprise architecture, AI strategy, governance design, and complex systems integration." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      background:
+        radial-gradient(circle at top left, rgba(147, 197, 253, 0.22), transparent 28%),
+        radial-gradient(circle at top right, rgba(59, 130, 246, 0.10), transparent 24%),
+        #f8fafc;
+    }
+    .page-view {
+      display: none;
+    }
+    .page-view.active {
+      display: block;
+    }
+    .glass {
+      background: rgba(255, 255, 255, 0.82);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+    .hero-grid {
+      background-image:
+        linear-gradient(to top, rgba(255,255,255,0.06), transparent),
+        linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px);
+      background-size: auto, 26px 26px, 26px 26px;
+      transform: perspective(600px) rotateX(74deg) scale(1.8) translateY(55px);
+      transform-origin: bottom;
+    }
+    .page-link.active {
+      background: rgb(241 245 249);
+      color: rgb(15 23 42);
+    }
+    .service-card:hover,
+    .insight-card:hover,
+    .value-card:hover {
+      transform: translateY(-4px);
+    }
+    .service-card,
+    .insight-card,
+    .value-card,
+    .result-card,
+    .info-card {
+      transition: transform 180ms ease, box-shadow 180ms ease;
+    }
+  </style>
+</head>
+<body class="min-h-screen text-slate-900 antialiased">
+  <header class="sticky top-0 z-50 border-b border-slate-200/70 bg-white/70 backdrop-blur-xl">
+    <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
+      <a href="#home" data-route="home" class="flex items-center gap-3 route-link">
+        <div class="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-blue-900 to-blue-600 text-sm font-bold text-white shadow-lg shadow-blue-500/20">RO</div>
+        <div>
+          <div class="text-lg font-semibold tracking-tight">RO IT Systems</div>
+          <div class="text-sm text-slate-500">Enterprise transformation consulting</div>
+        </div>
+      </a>
+
+      <nav class="hidden items-center gap-2 md:flex">
+        <a href="#home" data-route="home" class="page-link route-link rounded-full px-4 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-950">Home</a>
+        <a href="#services" data-route="services" class="page-link route-link rounded-full px-4 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-950">Services</a>
+        <a href="#results" data-route="results" class="page-link route-link rounded-full px-4 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-950">Results</a>
+        <a href="#about" data-route="about" class="page-link route-link rounded-full px-4 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-950">About</a>
+        <a href="#insights" data-route="insights" class="page-link route-link rounded-full px-4 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-950">Insights</a>
+        <a href="#contact" data-route="contact" class="page-link route-link ml-2 rounded-full border border-blue-200 bg-white px-4 py-2 text-sm font-semibold text-blue-900 shadow-sm transition hover:-translate-y-0.5">Contact</a>
+      </nav>
+
+      <button id="mobileMenuButton" class="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white p-2 text-slate-700 md:hidden" aria-label="Toggle navigation">
+        <i data-lucide="menu" class="h-5 w-5"></i>
+      </button>
+    </div>
+
+    <div id="mobileMenu" class="hidden border-t border-slate-200 bg-white/95 px-4 py-3 md:hidden">
+      <div class="flex flex-col gap-2">
+        <a href="#home" data-route="home" class="route-link rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-100">Home</a>
+        <a href="#services" data-route="services" class="route-link rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-100">Services</a>
+        <a href="#results" data-route="results" class="route-link rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-100">Results</a>
+        <a href="#about" data-route="about" class="route-link rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-100">About</a>
+        <a href="#insights" data-route="insights" class="route-link rounded-2xl px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-100">Insights</a>
+        <a href="#contact" data-route="contact" class="route-link rounded-2xl px-4 py-3 text-sm font-semibold text-blue-900 hover:bg-blue-50">Contact</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="home" class="page-view active">
+      <div class="px-4 pb-8 pt-6 sm:px-6 lg:px-8 lg:pt-10">
+        <div class="mx-auto max-w-7xl overflow-hidden rounded-[2rem] border border-white/40 bg-gradient-to-br from-slate-950 via-blue-950 to-blue-600 shadow-[0_30px_100px_rgba(15,23,42,0.18)]">
+          <div class="relative grid min-h-[680px] items-center lg:grid-cols-[1.1fr_0.9fr]">
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_78%_22%,rgba(255,255,255,0.28),transparent_14%),radial-gradient(circle_at_83%_28%,rgba(191,219,254,0.18),transparent_24%),linear-gradient(to_top,rgba(255,255,255,0.06),transparent_30%)]"></div>
+            <div class="hero-grid absolute bottom-0 left-0 right-0 h-72 opacity-30"></div>
+            <div class="absolute right-10 top-10 hidden h-80 w-80 rounded-full bg-[radial-gradient(circle_at_35%_35%,rgba(255,255,255,0.95),rgba(255,255,255,0.34)_36%,rgba(255,255,255,0.08)_62%,transparent_74%)] opacity-90 blur-[1px] lg:block"></div>
+            <div class="absolute right-24 top-40 hidden rounded-3xl border border-white/15 bg-white/10 px-5 py-4 text-white/90 shadow-2xl backdrop-blur-md lg:block">
+              <div class="text-xs font-semibold uppercase tracking-[0.18em] text-white/60">Built for</div>
+              <div class="mt-1 text-base font-semibold">Regulated enterprises</div>
+            </div>
+            <div class="absolute bottom-28 right-16 hidden rounded-3xl border border-white/15 bg-white/10 px-5 py-4 text-white/90 shadow-2xl backdrop-blur-md lg:block">
+              <div class="text-xs font-semibold uppercase tracking-[0.18em] text-white/60">Consulting focus</div>
+              <div class="mt-1 text-base font-semibold">AI, architecture, governance</div>
+            </div>
+
+            <div class="relative z-10 px-6 py-12 sm:px-10 md:px-12 lg:px-16">
+              <div class="inline-flex items-center rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white/85">
+                Modern consulting for complex technology change
+              </div>
+
+              <h1 class="mt-6 max-w-3xl text-4xl font-semibold tracking-tight text-white sm:text-5xl lg:text-7xl">
+                RO IT Systems helps organizations turn complexity into momentum.
+              </h1>
+
+              <p class="mt-6 max-w-2xl text-base leading-7 text-white/78 sm:text-lg">
+                Consulting for enterprise architecture, AI implementation, governance design, and complex systems integration in environments where resilience, clarity, and execution all matter.
+              </p>
+
+              <div class="mt-8 flex flex-wrap gap-3">
+                <a href="#contact" data-route="contact" class="route-link inline-flex items-center justify-center rounded-full bg-white px-5 py-3 text-sm font-semibold text-blue-950 shadow-xl transition hover:-translate-y-0.5">Book a consultation</a>
+                <a href="#services" data-route="services" class="route-link inline-flex items-center justify-center rounded-full border border-white/20 bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur transition hover:-translate-y-0.5">Explore services</a>
+              </div>
+
+              <div class="mt-10 grid gap-3 sm:grid-cols-3">
+                <div class="rounded-3xl border border-white/15 bg-white/10 p-4 text-white backdrop-blur-md">
+                  <div class="text-2xl font-semibold tracking-tight">AI</div>
+                  <div class="mt-2 text-sm leading-6 text-white/72">Practical implementation and governance</div>
+                </div>
+                <div class="rounded-3xl border border-white/15 bg-white/10 p-4 text-white backdrop-blur-md">
+                  <div class="text-2xl font-semibold tracking-tight">Risk</div>
+                  <div class="mt-2 text-sm leading-6 text-white/72">Compliance-aware architecture decisions</div>
+                </div>
+                <div class="rounded-3xl border border-white/15 bg-white/10 p-4 text-white backdrop-blur-md">
+                  <div class="text-2xl font-semibold tracking-tight">Scale</div>
+                  <div class="mt-2 text-sm leading-6 text-white/72">Cloud, data, integration, and operating model design</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="relative hidden h-full lg:block"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="px-4 py-10 sm:px-6 lg:px-8">
+        <div class="mx-auto grid max-w-7xl gap-5 md:grid-cols-3">
+          <div class="value-card glass rounded-[2rem] border border-white/70 p-7 shadow-[0_20px_60px_rgba(15,23,42,0.08)]">
+            <div class="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-blue-200/60 bg-gradient-to-b from-blue-100 to-blue-50 text-blue-900">
+              <i data-lucide="building-2" class="h-7 w-7"></i>
+            </div>
+            <h3 class="text-xl font-semibold tracking-tight text-slate-950">Architecture-led advisory</h3>
+            <p class="mt-3 text-sm leading-6 text-slate-600 md:text-base">Enterprise architecture recommendations grounded in real delivery constraints, platform realities, and organizational fit.</p>
+          </div>
+          <div class="value-card glass rounded-[2rem] border border-white/70 p-7 shadow-[0_20px_60px_rgba(15,23,42,0.08)]">
+            <div class="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-blue-200/60 bg-gradient-to-b from-blue-100 to-blue-50 text-blue-900">
+              <i data-lucide="bot" class="h-7 w-7"></i>
+            </div>
+            <h3 class="text-xl font-semibold tracking-tight text-slate-950">Responsible AI execution</h3>
+            <p class="mt-3 text-sm leading-6 text-slate-600 md:text-base">AI strategy, governance, and practical implementation patterns focused on enterprise adoption rather than hype.</p>
+          </div>
+          <div class="value-card glass rounded-[2rem] border border-white/70 p-7 shadow-[0_20px_60px_rgba(15,23,42,0.08)]">
+            <div class="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-blue-200/60 bg-gradient-to-b from-blue-100 to-blue-50 text-blue-900">
+              <i data-lucide="shield-check" class="h-7 w-7"></i>
+            </div>
+            <h3 class="text-xl font-semibold tracking-tight text-slate-950">Governance that works</h3>
+            <p class="mt-3 text-sm leading-6 text-slate-600 md:text-base">Decision rights, controls, and operating rhythms designed to accelerate execution with accountability.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="services" class="page-view px-4 py-16 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-7xl">
+        <div class="mb-10">
+          <div class="inline-flex items-center rounded-full border border-blue-200/60 bg-blue-100/60 px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-blue-900">Core consulting skills</div>
+          <h2 class="mt-4 max-w-4xl text-3xl font-semibold tracking-tight text-slate-950 md:text-5xl">Services built around enterprise transformation.</h2>
+          <p class="mt-4 max-w-3xl text-base leading-7 text-slate-600 md:text-lg">From platform modernization to AI operating models, the practice is oriented around solving high-stakes technology problems where architecture, governance, and execution must work together.</p>
+        </div>
+
+        <div class="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+          <article class="service-card glass rounded-[2rem] border border-white/70 p-6 shadow-[0_20px_60px_rgba(15,23,42,0.08)]">
+            <div class="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl border border-blue-200/60 bg-gradient-to-b from-blue-100 to-blue-50 text-blue-900"><i data-lucide="building-2" class="h-7 w-7"></i></div>
+            <h3 class="text-xl font-semibold tracking-tight text-slate-950">Enterprise Architecture & Platform Strategy</h3>
+            <p class="mt-3 text-sm leading-6 text-slate-600 md:text-base">Design future-state architecture for data, integration, and cloud platforms with a clear line from business priorities to implementation.</p>
+            <div class="mt-6 flex flex-wrap gap-2">
+              <span class="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700">Target architecture</span>
+              <span class="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700">Modernization roadmaps</span>
+              <span class="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700">Cloud platforms</span>
+            </div>
+          </article>
+
+          <article class="service-card glass rounded-[2rem] border border-white/70 p-6 shadow-[0_20px_60px_rgba(15,23,42,0.08)]">
+            <div class="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl border border-blue-200/60 bg-gradient-to-b from-blue-100 to-blue-50 text-blue-900"><i data-lucide="shield-check" class="h-7 w-7"></i></div>
+            <h3 class="text-xl font-semibold tracking-tight text-slate-950">Regulatory & Risk-Aligned Design</h3>
+            <p class="mt-3 text-sm leading-6 text-slate-600 md:text-base">Build systems and delivery approaches that account for privacy, residency, auditability, third-party risk, and sector-specific controls.</p>
+            <div class="mt-6 flex flex-wrap gap-2">
+              <span class="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700">Risk controls</span>
+              <span class="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700">Data governance</span>
+              <span class="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700">Audit readiness</span>
+            </div>
+          </article>
+
+          <article class="service-card glass rounded-[2rem] border border-white/70 p-6 shadow-[0_20px_60px_rgba(15,23,42,0.08)]">
+            <div class="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl border border-blue-200/60 bg-gradient-to-b from-blue-100 to-blue-50 text-blue-900"><i data-lucide="bot" class="h-7 w-7"></i></div>
+            <h3 class="text-xl font-semibold tracking-tight text-slate-950">AI Strategy & Applied Implementation</h3>
+            <p class="mt-3 text-sm leading-6 text-slate-600 md:text-base">Translate AI ambition into concrete operating models, use cases, controls, and technical patterns that can be adopted responsibly.</p>
+            <div class="mt-6 flex flex-wrap gap-2">
+              <span class="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700">GenAI strategy</span>
+              <span class="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700">RAG use cases</span>
+              <span class="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700">Operating models</span>
+            </div>
+          </article>
+
+          <article class="service-card glass rounded-[2rem] border border-white/70 p-6 shadow-[0_20px_60px_rgba(15,23,42,0.08)]">
+            <div class="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl border border-blue-200/60 bg-gradient-to-b from-blue-100 to-blue-50 text-blue-900"><i data-lucide="network" class="h-7 w-7"></i></div>
+            <h3 class="text-xl font-semibold tracking-tight text-slate-950">Complex Systems Integration</h3>
+            <p class="mt-3 text-sm leading-6 text-slate-600 md:text-base">Connect and rationalize heterogeneous ecosystems across APIs, ETL, event streams, data platforms, and legacy services.</p>
+            <div class="mt-6 flex flex-wrap gap-2">
+              <span class="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700">Integration patterns</span>
+              <span class="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700">Migration planning</span>
+              <span class="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700">Interoperability</span>
+            </div>
+          </article>
+
+          <article class="service-card glass rounded-[2rem] border border-white/70 p-6 shadow-[0_20px_60px_rgba(15,23,42,0.08)]">
+            <div class="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl border border-blue-200/60 bg-gradient-to-b from-blue-100 to-blue-50 text-blue-900"><i data-lucide="chart-column-big" class="h-7 w-7"></i></div>
+            <h3 class="text-xl font-semibold tracking-tight text-slate-950">Operating Model & Governance Design</h3>
+            <p class="mt-3 text-sm leading-6 text-slate-600 md:text-base">Define decision rights, delivery structures, intake processes, and governance rhythms that allow teams to move faster with accountability.</p>
+            <div class="mt-6 flex flex-wrap gap-2">
+              <span class="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700">Decision rights</span>
+              <span class="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700">DevOps transition</span>
+              <span class="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700">Portfolio intake</span>
+            </div>
+          </article>
+
+          <article class="service-card glass rounded-[2rem] border border-white/70 p-6 shadow-[0_20px_60px_rgba(15,23,42,0.08)]">
+            <div class="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl border border-blue-200/60 bg-gradient-to-b from-blue-100 to-blue-50 text-blue-900"><i data-lucide="messages-square" class="h-7 w-7"></i></div>
+            <h3 class="text-xl font-semibold tracking-tight text-slate-950">Strategic Communication & Stakeholder Alignment</h3>
+            <p class="mt-3 text-sm leading-6 text-slate-600 md:text-base">Support executive, board, and cross-functional alignment with clear narratives, risk framing, and decision-ready communications.</p>
+            <div class="mt-6 flex flex-wrap gap-2">
+              <span class="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700">Executive advisory</span>
+              <span class="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700">Board communications</span>
+              <span class="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700">Transformation narratives</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="results" class="page-view px-4 py-16 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-7xl">
+        <div class="mb-10">
+          <div class="inline-flex items-center rounded-full border border-blue-200/60 bg-blue-100/60 px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-blue-900">Outcome oriented</div>
+          <h2 class="mt-4 max-w-4xl text-3xl font-semibold tracking-tight text-slate-950 md:text-5xl">Consulting designed to move from analysis to delivery.</h2>
+          <p class="mt-4 max-w-3xl text-base leading-7 text-slate-600 md:text-lg">The focus is not on slideware alone. Engagements are structured to produce decisions, roadmaps, implementation direction, and measurable execution momentum.</p>
+        </div>
+
+        <div class="grid gap-5 lg:grid-cols-[1.15fr_0.85fr]">
+          <div class="result-card glass rounded-[2rem] border border-white/70 p-7 shadow-[0_20px_60px_rgba(15,23,42,0.08)]">
+            <h3 class="text-2xl font-semibold tracking-tight text-slate-950">What clients typically need</h3>
+            <div class="mt-6 grid gap-4 text-slate-600">
+              <div class="rounded-2xl border border-slate-200 bg-slate-50/80 p-4"><span class="font-semibold text-slate-950">Clarity. </span>A realistic target state for platforms, AI, and governance.</div>
+              <div class="rounded-2xl border border-slate-200 bg-slate-50/80 p-4"><span class="font-semibold text-slate-950">Control. </span>Architecture choices that hold up under operational and regulatory scrutiny.</div>
+              <div class="rounded-2xl border border-slate-200 bg-slate-50/80 p-4"><span class="font-semibold text-slate-950">Execution. </span>A delivery path that teams can actually sustain.</div>
+              <div class="rounded-2xl border border-slate-200 bg-slate-50/80 p-4"><span class="font-semibold text-slate-950">Alignment. </span>Shared understanding between technology, business, risk, and leadership stakeholders.</div>
+            </div>
+          </div>
+
+          <div class="grid gap-5 self-end sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+            <div class="glass rounded-[2rem] border border-white/70 p-7 shadow-[0_20px_60px_rgba(15,23,42,0.08)]"><div class="text-4xl font-semibold tracking-tight text-slate-950">01</div><div class="mt-3 text-lg font-semibold text-slate-900">Strategy</div><p class="mt-2 text-sm leading-6 text-slate-600">Define the problem, future state, and constraints.</p></div>
+            <div class="glass rounded-[2rem] border border-white/70 p-7 shadow-[0_20px_60px_rgba(15,23,42,0.08)]"><div class="text-4xl font-semibold tracking-tight text-slate-950">02</div><div class="mt-3 text-lg font-semibold text-slate-900">Architecture</div><p class="mt-2 text-sm leading-6 text-slate-600">Design pragmatic patterns, controls, and platform decisions.</p></div>
+            <div class="glass rounded-[2rem] border border-white/70 p-7 shadow-[0_20px_60px_rgba(15,23,42,0.08)]"><div class="text-4xl font-semibold tracking-tight text-slate-950">03</div><div class="mt-3 text-lg font-semibold text-slate-900">Governance</div><p class="mt-2 text-sm leading-6 text-slate-600">Set decision rights, intake, and accountability rhythms.</p></div>
+            <div class="glass rounded-[2rem] border border-white/70 p-7 shadow-[0_20px_60px_rgba(15,23,42,0.08)]"><div class="text-4xl font-semibold tracking-tight text-slate-950">04</div><div class="mt-3 text-lg font-semibold text-slate-900">Delivery</div><p class="mt-2 text-sm leading-6 text-slate-600">Translate direction into roadmaps, execution, and adoption.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="page-view px-4 py-16 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-7xl">
+        <div class="mb-10">
+          <div class="inline-flex items-center rounded-full border border-blue-200/60 bg-blue-100/60 px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-blue-900">Why RO IT Systems</div>
+          <h2 class="mt-4 max-w-4xl text-3xl font-semibold tracking-tight text-slate-950 md:text-5xl">A consulting practice centered on high-stakes technology environments.</h2>
+          <p class="mt-4 max-w-3xl text-base leading-7 text-slate-600 md:text-lg">RO IT Systems is positioned for organizations navigating modernization, AI adoption, platform complexity, and governance demands at the same time.</p>
+        </div>
+
+        <div class="grid gap-5 lg:grid-cols-2">
+          <div class="info-card glass rounded-[2rem] border border-white/70 p-7 shadow-[0_20px_60px_rgba(15,23,42,0.08)]">
+            <h3 class="text-2xl font-semibold tracking-tight text-slate-950">Advisory posture</h3>
+            <div class="mt-6 grid gap-4">
+              <div class="rounded-2xl border border-blue-100 bg-blue-50/50 p-4"><div class="font-semibold text-slate-950">Executive level framing</div><p class="mt-1 text-sm leading-6 text-slate-600">Translate technical complexity into decision-ready guidance for leaders and boards.</p></div>
+              <div class="rounded-2xl border border-blue-100 bg-blue-50/50 p-4"><div class="font-semibold text-slate-950">Hands-on technical depth</div><p class="mt-1 text-sm leading-6 text-slate-600">Ground recommendations in real platform, integration, and delivery experience.</p></div>
+              <div class="rounded-2xl border border-blue-100 bg-blue-50/50 p-4"><div class="font-semibold text-slate-950">Governance-aware execution</div><p class="mt-1 text-sm leading-6 text-slate-600">Design change that is sustainable under operational, legal, and compliance pressure.</p></div>
+            </div>
+          </div>
+
+          <div class="info-card glass rounded-[2rem] border border-white/70 p-7 shadow-[0_20px_60px_rgba(15,23,42,0.08)]">
+            <h3 class="text-2xl font-semibold tracking-tight text-slate-950">Ideal engagements</h3>
+            <div class="mt-6 grid gap-4">
+              <div class="rounded-2xl border border-blue-100 bg-blue-50/50 p-4"><div class="font-semibold text-slate-950">Platform modernization</div><p class="mt-1 text-sm leading-6 text-slate-600">Legacy data, integration, and architecture transformation with clear sequencing.</p></div>
+              <div class="rounded-2xl border border-blue-100 bg-blue-50/50 p-4"><div class="font-semibold text-slate-950">AI adoption roadmaps</div><p class="mt-1 text-sm leading-6 text-slate-600">Responsible AI strategy, use case selection, governance, and implementation patterns.</p></div>
+              <div class="rounded-2xl border border-blue-100 bg-blue-50/50 p-4"><div class="font-semibold text-slate-950">Regulated operating models</div><p class="mt-1 text-sm leading-6 text-slate-600">Delivery structures and architecture decisions for environments with high trust requirements.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="insights" class="page-view px-4 py-16 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-7xl">
+        <div class="mb-10">
+          <div class="inline-flex items-center rounded-full border border-blue-200/60 bg-blue-100/60 px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-blue-900">Insights</div>
+          <h2 class="mt-4 max-w-4xl text-3xl font-semibold tracking-tight text-slate-950 md:text-5xl">Topics that matter to modern technology leaders.</h2>
+          <p class="mt-4 max-w-3xl text-base leading-7 text-slate-600 md:text-lg">Thought leadership areas that fit the practice: AI governance, platform modernization, delivery operating models, and risk-aware enterprise transformation.</p>
+        </div>
+
+        <div class="grid gap-5 lg:grid-cols-3">
+          <article class="insight-card glass flex min-h-[260px] flex-col rounded-[2rem] border border-white/70 p-7 shadow-[0_20px_60px_rgba(15,23,42,0.08)]">
+            <div class="text-sm font-semibold text-slate-500">April 2026</div>
+            <h3 class="mt-4 text-xl font-semibold tracking-tight text-slate-950">What responsible enterprise AI adoption actually requires</h3>
+            <p class="mt-3 text-sm leading-6 text-slate-600 md:text-base">How to move beyond pilots toward practical controls, data boundaries, and operating disciplines.</p>
+            <a href="#contact" data-route="contact" class="route-link mt-auto inline-flex items-center gap-2 pt-6 text-sm font-semibold text-blue-900">Discuss this topic <i data-lucide="arrow-right" class="h-4 w-4"></i></a>
+          </article>
+
+          <article class="insight-card glass flex min-h-[260px] flex-col rounded-[2rem] border border-white/70 p-7 shadow-[0_20px_60px_rgba(15,23,42,0.08)]">
+            <div class="text-sm font-semibold text-slate-500">April 2026</div>
+            <h3 class="mt-4 text-xl font-semibold tracking-tight text-slate-950">Modernizing data and integration without creating delivery chaos</h3>
+            <p class="mt-3 text-sm leading-6 text-slate-600 md:text-base">Sequencing architecture and operating model changes so platform transformation stays usable for delivery teams.</p>
+            <a href="#contact" data-route="contact" class="route-link mt-auto inline-flex items-center gap-2 pt-6 text-sm font-semibold text-blue-900">Discuss this topic <i data-lucide="arrow-right" class="h-4 w-4"></i></a>
+          </article>
+
+          <article class="insight-card glass flex min-h-[260px] flex-col rounded-[2rem] border border-white/70 p-7 shadow-[0_20px_60px_rgba(15,23,42,0.08)]">
+            <div class="text-sm font-semibold text-slate-500">April 2026</div>
+            <h3 class="mt-4 text-xl font-semibold tracking-tight text-slate-950">Governance that accelerates execution instead of slowing it down</h3>
+            <p class="mt-3 text-sm leading-6 text-slate-600 md:text-base">Designing decision rights and review structures that support speed, clarity, and accountability together.</p>
+            <a href="#contact" data-route="contact" class="route-link mt-auto inline-flex items-center gap-2 pt-6 text-sm font-semibold text-blue-900">Discuss this topic <i data-lucide="arrow-right" class="h-4 w-4"></i></a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="page-view px-4 pb-20 pt-10 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-7xl grid gap-6 lg:grid-cols-[0.92fr_1.08fr]">
+        <div class="overflow-hidden rounded-[2rem] bg-gradient-to-br from-slate-950 via-blue-900 to-blue-500 p-8 text-white shadow-[0_30px_100px_rgba(15,23,42,0.18)] sm:p-10 lg:p-12">
+          <div class="inline-flex items-center rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-white/85">Contact</div>
+          <h2 class="mt-4 max-w-3xl text-3xl font-semibold tracking-tight text-white md:text-5xl">Need help shaping a complex transformation?</h2>
+          <p class="mt-4 max-w-2xl text-base leading-7 text-white/80 md:text-lg">RO IT Systems provides strategic and implementation-focused consulting for organizations navigating AI, platform modernization, enterprise integration, and governance-heavy change.</p>
+
+          <div class="mt-10 grid gap-4 text-white/85">
+            <div class="rounded-2xl border border-white/10 bg-white/10 p-4 backdrop-blur-sm">
+              <div class="text-sm font-semibold uppercase tracking-[0.14em] text-white/60">Typical topics</div>
+              <div class="mt-2 text-sm leading-6">Enterprise architecture, AI strategy, governance design, modernization roadmaps, and integration programs.</div>
+            </div>
+            <div class="rounded-2xl border border-white/10 bg-white/10 p-4 backdrop-blur-sm">
+              <div class="text-sm font-semibold uppercase tracking-[0.14em] text-white/60">Engagement style</div>
+              <div class="mt-2 text-sm leading-6">Advisory, discovery, roadmap design, architecture review, and executive briefing support.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass rounded-[2rem] border border-white/70 p-7 shadow-[0_20px_60px_rgba(15,23,42,0.08)] sm:p-8">
+          <div class="mb-6">
+            <h3 class="text-2xl font-semibold tracking-tight text-slate-950">Start a conversation</h3>
+            <p class="mt-2 text-sm leading-6 text-slate-600">This single-page source includes a working front-end contact form with validation and a mailto handoff.</p>
+          </div>
+
+          <form id="contactForm" class="grid gap-5" novalidate>
+            <div class="grid gap-5 md:grid-cols-2">
+              <div>
+                <label for="name" class="mb-2 block text-sm font-semibold text-slate-800">Name</label>
+                <input id="name" name="name" type="text" required class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-900 outline-none ring-0 transition focus:border-blue-400" placeholder="Your name" />
+                <p class="mt-2 hidden text-sm text-red-600" data-error-for="name">Please enter your name.</p>
+              </div>
+              <div>
+                <label for="email" class="mb-2 block text-sm font-semibold text-slate-800">Email</label>
+                <input id="email" name="email" type="email" required class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-900 outline-none ring-0 transition focus:border-blue-400" placeholder="you@example.com" />
+                <p class="mt-2 hidden text-sm text-red-600" data-error-for="email">Please enter a valid email address.</p>
+              </div>
+            </div>
+
+            <div class="grid gap-5 md:grid-cols-2">
+              <div>
+                <label for="company" class="mb-2 block text-sm font-semibold text-slate-800">Company</label>
+                <input id="company" name="company" type="text" class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-900 outline-none ring-0 transition focus:border-blue-400" placeholder="Organization name" />
+              </div>
+              <div>
+                <label for="service" class="mb-2 block text-sm font-semibold text-slate-800">Service area</label>
+                <select id="service" name="service" class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-900 outline-none ring-0 transition focus:border-blue-400">
+                  <option value="">Select a service</option>
+                  <option>Enterprise Architecture & Platform Strategy</option>
+                  <option>Regulatory & Risk-Aligned Design</option>
+                  <option>AI Strategy & Applied Implementation</option>
+                  <option>Complex Systems Integration</option>
+                  <option>Operating Model & Governance Design</option>
+                  <option>Strategic Communication & Stakeholder Alignment</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label for="timeline" class="mb-2 block text-sm font-semibold text-slate-800">Timeline</label>
+              <input id="timeline" name="timeline" type="text" class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-900 outline-none ring-0 transition focus:border-blue-400" placeholder="For example: Immediate, this quarter, exploratory" />
+            </div>
+
+            <div>
+              <label for="message" class="mb-2 block text-sm font-semibold text-slate-800">Project details</label>
+              <textarea id="message" name="message" rows="6" required class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-slate-900 outline-none ring-0 transition focus:border-blue-400" placeholder="Tell us about your challenge, goals, and context."></textarea>
+              <p class="mt-2 hidden text-sm text-red-600" data-error-for="message">Please add a short description of your project.</p>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-3 pt-2">
+              <button type="submit" class="inline-flex items-center justify-center rounded-full bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-xl transition hover:-translate-y-0.5 hover:bg-blue-700">Prepare email inquiry</button>
+              <button type="button" id="copySummaryButton" class="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-800 shadow-sm transition hover:-translate-y-0.5">Copy inquiry summary</button>
+            </div>
+
+            <div id="formStatus" class="hidden rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800"></div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="px-4 pb-8 sm:px-6 lg:px-8">
+    <div class="mx-auto flex max-w-7xl flex-col gap-3 border-t border-slate-200 py-6 text-sm text-slate-500 md:flex-row md:items-center md:justify-between">
+      <div>© 2026 RO IT Systems. All rights reserved.</div>
+      <div>Enterprise architecture • AI strategy • governance • systems integration</div>
+    </div>
+  </footer>
+
+  <script>
+    const routes = ["home", "services", "results", "about", "insights", "contact"];
+
+    function renderRoute(routeName) {
+      const target = routes.includes(routeName) ? routeName : "home";
+
+      document.querySelectorAll('.page-view').forEach((section) => {
+        section.classList.toggle('active', section.id === target);
+      });
+
+      document.querySelectorAll('.page-link').forEach((link) => {
+        link.classList.toggle('active', link.dataset.route === target);
+      });
+
+      if (location.hash !== `#${target}`) {
+        history.replaceState(null, '', `#${target}`);
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function handleNavigation(event) {
+      const link = event.target.closest('.route-link');
+      if (!link) return;
+      const route = link.dataset.route;
+      if (!route) return;
+      event.preventDefault();
+      renderRoute(route);
+      const mobileMenu = document.getElementById('mobileMenu');
+      mobileMenu.classList.add('hidden');
+    }
+
+    document.addEventListener('click', handleNavigation);
+    window.addEventListener('hashchange', () => {
+      const route = location.hash.replace('#', '') || 'home';
+      renderRoute(route);
+    });
+
+    renderRoute(location.hash.replace('#', '') || 'home');
+
+    const mobileMenuButton = document.getElementById('mobileMenuButton');
+    const mobileMenu = document.getElementById('mobileMenu');
+    mobileMenuButton.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+
+    const form = document.getElementById('contactForm');
+    const statusBox = document.getElementById('formStatus');
+    const copySummaryButton = document.getElementById('copySummaryButton');
+    const destinationEmail = 'contact@roitsystems.example';
+
+    function escapeLine(value) {
+      return String(value || '').replace(/\r?\n/g, ' ').trim();
+    }
+
+    function validateForm() {
+      let valid = true;
+      const name = document.getElementById('name');
+      const email = document.getElementById('email');
+      const message = document.getElementById('message');
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      const checks = [
+        { field: name, ok: name.value.trim().length > 0 },
+        { field: email, ok: emailPattern.test(email.value.trim()) },
+        { field: message, ok: message.value.trim().length > 0 },
+      ];
+
+      checks.forEach(({ field, ok }) => {
+        const error = document.querySelector(`[data-error-for="${field.name}"]`);
+        if (ok) {
+          field.classList.remove('border-red-400');
+          error.classList.add('hidden');
+        } else {
+          valid = false;
+          field.classList.add('border-red-400');
+          error.classList.remove('hidden');
+        }
+      });
+
+      return valid;
+    }
+
+    function buildInquirySummary() {
+      const formData = new FormData(form);
+      const name = escapeLine(formData.get('name'));
+      const email = escapeLine(formData.get('email'));
+      const company = escapeLine(formData.get('company'));
+      const service = escapeLine(formData.get('service'));
+      const timeline = escapeLine(formData.get('timeline'));
+      const message = String(formData.get('message') || '').trim();
+
+      return [
+        'RO IT Systems Inquiry',
+        '',
+        `Name: ${name || 'Not provided'}`,
+        `Email: ${email || 'Not provided'}`,
+        `Company: ${company || 'Not provided'}`,
+        `Service area: ${service || 'Not selected'}`,
+        `Timeline: ${timeline || 'Not provided'}`,
+        '',
+        'Project details:',
+        message || 'Not provided',
+      ].join('\n');
+    }
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      statusBox.classList.add('hidden');
+      statusBox.textContent = '';
+
+      if (!validateForm()) {
+        statusBox.className = 'rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700';
+        statusBox.textContent = 'Please correct the highlighted fields and try again.';
+        statusBox.classList.remove('hidden');
+        return;
+      }
+
+      const formData = new FormData(form);
+      const subjectBase = formData.get('service') || 'Consulting inquiry';
+      const subject = encodeURIComponent(`RO IT Systems | ${subjectBase}`);
+      const body = encodeURIComponent(buildInquirySummary());
+      window.location.href = `mailto:${destinationEmail}?subject=${subject}&body=${body}`;
+
+      statusBox.className = 'rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800';
+      statusBox.textContent = 'Your email client should open with a prepared inquiry.';
+      statusBox.classList.remove('hidden');
+    });
+
+    copySummaryButton.addEventListener('click', async () => {
+      statusBox.classList.add('hidden');
+      if (!validateForm()) {
+        statusBox.className = 'rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700';
+        statusBox.textContent = 'Please correct the highlighted fields before copying the inquiry summary.';
+        statusBox.classList.remove('hidden');
+        return;
+      }
+
+      const summary = buildInquirySummary();
+      try {
+        await navigator.clipboard.writeText(summary);
+        statusBox.className = 'rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800';
+        statusBox.textContent = 'Inquiry summary copied to clipboard.';
+        statusBox.classList.remove('hidden');
+      } catch (error) {
+        statusBox.className = 'rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800';
+        statusBox.textContent = 'Clipboard copy was blocked by the browser. You can still submit to open your email client.';
+        statusBox.classList.remove('hidden');
+      }
+    });
+
+    lucide.createIcons();
+  </script>
+</body>
+</html>
