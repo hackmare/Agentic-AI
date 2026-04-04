@@ -1,0 +1,21 @@
+{
+  "name": "signalk-ecowitt-gw2000",
+  "version": "0.1.0",
+  "description": "SignalK plugin for Ecowitt GW2000B with WS90 all-in-one weather station",
+  "keywords": [
+    "signalk-node-server-plugin",
+    "signalk",
+    "ecowitt",
+    "gw2000",
+    "ws90",
+    "weather"
+  ],
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"No tests yet\""
+  },
+  "dependencies": {},
+  "author": "",
+  "license": "MIT",
+  "signalk-plugin-enabled-by-default": false
+}
