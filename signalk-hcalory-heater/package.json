@@ -1,0 +1,23 @@
+{
+  "name": "signalk-hcalory-heater",
+  "version": "0.1.0",
+  "description": "SignalK plugin to monitor and control HCALORY TB2S diesel heater via Bluetooth LE",
+  "keywords": [
+    "signalk-node-server-plugin",
+    "signalk",
+    "diesel-heater",
+    "hcalory",
+    "bluetooth",
+    "ble"
+  ],
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"No tests yet\""
+  },
+  "dependencies": {
+    "@abandonware/noble": "^1.9.2-15"
+  },
+  "author": "",
+  "license": "MIT",
+  "signalk-plugin-enabled-by-default": false
+}
