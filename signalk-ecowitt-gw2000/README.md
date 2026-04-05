@@ -43,7 +43,7 @@ Open Signal K admin → **Plugin Config** → **Ecowitt GW2000B + WS90 Weather S
 
 | Setting | Description | Default |
 |---------|-------------|---------|
-| GW2000B IP address | Fixed LAN IP of your gateway | `192.168.0.35` |
+| GW2000B IP address | Fixed LAN IP of your gateway | `1.2.3.4` |
 | HTTP port | Gateway web port (usually 80) | `80` |
 | Poll interval (s) | How often to request data | `16` |
 | Publish wind as true wind | True = true wind paths, False = apparent | `true` |
