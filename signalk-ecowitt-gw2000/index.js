@@ -69,14 +69,14 @@ module.exports = function (app) {
       pollInterval: {
         type: 'number',
         title: 'Poll interval (seconds)',
-        default: 16,
-        minimum: 8,
+        default: 60,
+        minimum: 10,
         maximum: 300,
       },
       windAsTrue: {
         type: 'boolean',
         title: 'Publish wind as true wind (vs apparent)',
-        default: true,
+        default: false,
       },
     },
   };
