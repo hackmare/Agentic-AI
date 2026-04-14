@@ -1,3 +1,6 @@
+# Copyright (c) 2026 Morgane Oger <m.oger@roitsystems.ca>
+# Licensed under the MIT License. See LICENSE file in the project root.
+
 from dotenv import load_dotenv
 import discord
 import os
