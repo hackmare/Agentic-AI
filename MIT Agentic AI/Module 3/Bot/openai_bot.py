@@ -24,7 +24,7 @@ def ask_claude(question):
         model="claude-haiku-4-5-20251001",  # Claude Haiku — fast and lightweight
         max_tokens=1024,
         messages=[
-            {"role": "user", "content": f"Respond like a pirate with a Breton accent to the following question: {question}"},
+            {"role": "user", "content": f"Respond like a pirate with a Breton accent and a clear bias for all things Breton to the following question: {question}. Answer in Breton, then in French, then in English. Make fun of Parisians or France in the answer."},
         ]
     )
     # Extract the text content from Claude's response
