@@ -8,22 +8,22 @@
 //
 // WS90 fields received from GW2000B get_livedata_info (JSON):
 //
-//   common list (keyed by hex ID):
-//     0x02  outdoor temperature        °C
-//     0x03  dew point                  °C
+//   common list (keyed by hex ID) — each entry has {id, val, unit}:
+//     0x02  outdoor temperature        °C or °F  (hub configured)
+//     0x03  dew point                  °C or °F
 //     0x07  outdoor humidity           %
 //     0x0A  wind direction             ° (0-359)
-//     0x0B  wind speed                 m/s
-//     0x0C  wind gust                  m/s
-//     0x19  wind gust max daily        m/s
+//     0x0B  wind speed                 m/s, km/h, mph, or knots (hub configured)
+//     0x0C  wind gust                  m/s, km/h, mph, or knots
+//     0x19  wind gust max daily        m/s, km/h, mph, or knots
 //     0x15  solar radiation            W/m²
 //     0x16  UV index                   (0-16)
 //     0x17  lightning strike count     count
 //     0x6D  lightning distance         km (when WH57 present)
 //
 //   piezoRain section (WS90 piezo rain sensor):
-//     rrain_piezo   rain rate           mm/hr
-//     srain_piezo   rain event total    mm
+//     rrain_piezo   rain rate           mm/hr or in/hr (hub configured)
+//     srain_piezo   rain event total    mm or in
 //     0x0D          daily rain          mm
 //     0x0E          rain rate           mm/hr
 //     0x7C          hourly rain         mm
@@ -83,9 +83,32 @@ module.exports = function (app) {
 
   // ── Unit conversions ──────────────────────────────────────────────────────
 
-  const C_TO_K    = (c) => c + 273.15;
-  const HPA_TO_PA = (h) => h * 100;
   const DEG_TO_RAD = (d) => d * Math.PI / 180;
+
+  // Convert wind speed from whatever unit the hub reports to m/s (SignalK standard)
+  function windToMs(val, unit) {
+    switch ((unit || '').toLowerCase().trim()) {
+      case 'km/h':              return val / 3.6;
+      case 'mph':               return val * 0.44704;
+      case 'knots': case 'kn': return val * 0.514444;
+      default:                  return val; // m/s — no conversion needed
+    }
+  }
+
+  // Convert temperature from whatever unit the hub reports to Kelvin (SignalK standard)
+  function tempToK(val, unit) {
+    if ((unit || '').trim() === '°F' || (unit || '').trim() === 'F') return (val - 32) * 5 / 9 + 273.15;
+    return val + 273.15; // °C default
+  }
+
+  // Convert pressure from whatever unit the hub reports to Pa (SignalK standard)
+  function pressureToPa(val, unit) {
+    switch ((unit || '').toLowerCase().trim()) {
+      case 'inhg': return val * 3386.39;
+      case 'mmhg': return val * 133.322;
+      default:     return val * 100; // hPa default
+    }
+  }
 
   // ── HTTP polling ──────────────────────────────────────────────────────────
 
@@ -123,17 +146,22 @@ module.exports = function (app) {
 
   // GW2000B returns common list as an array of {id, val, unit} objects
   // where id is a hex string like "0x02"
+  // Returns { map: {id → number}, units: {id → unit string} }
   function buildCommonMap(data) {
     const map = {};
+    const units = {};
     const list = data?.common_list ?? [];
     for (const item of list) {
       if (item.id !== undefined && item.val !== undefined) {
         const n = parseFloat(item.val);
         // Bug fix: filter NaN (GW2000B sends "--" for missing sensors)
-        if (!isNaN(n)) map[item.id] = n;
+        if (!isNaN(n)) {
+          map[item.id]   = n;
+          units[item.id] = item.unit ?? '';
+        }
       }
     }
-    return map;
+    return { map, units };
   }
 
   // piezoRain is an object with mixed named keys and hex-id keys
@@ -150,24 +178,24 @@ module.exports = function (app) {
   // ── Data parsing and SignalK publishing ───────────────────────────────────
 
   function parseAndPublish(data, options) {
-    const common = buildCommonMap(data);
+    const { map: common, units: commonUnits } = buildCommonMap(data);
     const piezo  = buildPiezoMap(data);
     const values  = [];
 
     // ── Outdoor temperature & humidity ────────────────────────────────────
     if (common['0x02'] !== undefined)
-      values.push({ path: 'environment.outside.temperature',   value: C_TO_K(common['0x02']) });
+      values.push({ path: 'environment.outside.temperature',   value: tempToK(common['0x02'], commonUnits['0x02']) });
 
     if (common['0x03'] !== undefined)
-      values.push({ path: 'environment.outside.dewPointTemperature', value: C_TO_K(common['0x03']) });
+      values.push({ path: 'environment.outside.dewPointTemperature', value: tempToK(common['0x03'], commonUnits['0x03']) });
 
     if (common['0x07'] !== undefined)
       values.push({ path: 'environment.outside.humidity',      value: common['0x07'] / 100 });
 
     // ── Wind ─────────────────────────────────────────────────────────────
-    const windDir   = common['0x0A'];
-    const windSpeed = common['0x0B'];
-    const windGust  = common['0x0C'];
+    const windDir     = common['0x0A'];
+    const windSpeed   = common['0x0B'];
+    const windGust    = common['0x0C'];
     const windGustMax = common['0x19'];
 
     if (windDir !== undefined) {
@@ -181,14 +209,14 @@ module.exports = function (app) {
       const path = options.windAsTrue
         ? 'environment.wind.speedTrue'
         : 'environment.wind.speedApparent';
-      values.push({ path, value: windSpeed });  // WS90 already in m/s
+      values.push({ path, value: windToMs(windSpeed, commonUnits['0x0B']) });
     }
 
     if (windGust !== undefined)
-      values.push({ path: 'environment.wind.gustSpeed', value: windGust });
+      values.push({ path: 'environment.wind.gustSpeed',       value: windToMs(windGust,    commonUnits['0x0C']) });
 
     if (windGustMax !== undefined)
-      values.push({ path: 'environment.wind.gustSpeedMaxDay', value: windGustMax });
+      values.push({ path: 'environment.wind.gustSpeedMaxDay', value: windToMs(windGustMax, commonUnits['0x19']) });
 
     // ── Solar radiation & UV ─────────────────────────────────────────────
     if (common['0x15'] !== undefined)
@@ -228,7 +256,7 @@ module.exports = function (app) {
     if (data?.indoor) {
       const indoor = data.indoor;
       if (indoor.temperature !== undefined)
-        values.push({ path: 'environment.inside.temperature', value: C_TO_K(parseFloat(indoor.temperature)) });
+        values.push({ path: 'environment.inside.temperature', value: tempToK(parseFloat(indoor.temperature), indoor.temperature_unit) });
       if (indoor.humidity !== undefined)
         values.push({ path: 'environment.inside.humidity',    value: parseFloat(indoor.humidity) / 100 });
     }
@@ -237,9 +265,9 @@ module.exports = function (app) {
     if (data?.pressure) {
       const pressure = data.pressure;
       if (pressure.absolute !== undefined)
-        values.push({ path: 'environment.outside.pressure',         value: HPA_TO_PA(parseFloat(pressure.absolute)) });
+        values.push({ path: 'environment.outside.pressure',         value: pressureToPa(parseFloat(pressure.absolute), pressure.unit) });
       if (pressure.relative !== undefined)
-        values.push({ path: 'environment.outside.pressureSeaLevel', value: HPA_TO_PA(parseFloat(pressure.relative)) });
+        values.push({ path: 'environment.outside.pressureSeaLevel', value: pressureToPa(parseFloat(pressure.relative), pressure.unit) });
     }
 
     // ── WS90 battery / capacitor voltage ─────────────────────────────────
