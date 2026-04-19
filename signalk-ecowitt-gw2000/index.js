@@ -6,39 +6,36 @@
 // No dynamic IP problem — we poll the GW2000B (fixed IP) rather than
 // waiting for it to push to the Pi (dynamic IP).
 //
-// WS90 fields received from GW2000B get_livedata_info (JSON):
+// Actual GW2000B get_livedata_info response structure (observed):
 //
-//   common list (keyed by hex ID) — each entry has {id, val, unit}:
-//     0x02  outdoor temperature        °C or °F  (hub configured)
-//     0x03  dew point                  °C or °F
-//     0x07  outdoor humidity           %
-//     0x0A  wind direction             ° (0-359)
-//     0x0B  wind speed                 m/s, km/h, mph, or knots (hub configured)
-//     0x0C  wind gust                  m/s, km/h, mph, or knots
-//     0x19  wind gust max daily        m/s, km/h, mph, or knots
-//     0x15  solar radiation            W/m²
-//     0x16  UV index                   (0-16)
-//     0x17  lightning strike count     count
-//     0x6D  lightning distance         km (when WH57 present)
+//   common_list: array of {id, val, [unit]} — unit may be in val string or item.unit
+//     0x02  outdoor temperature        val="16.4" unit="C"
+//     0x03  dew point                  val="4.8"  unit="C"
+//     0x07  outdoor humidity           val="46%"
+//     0x0A  wind direction             val="15"   (degrees)
+//     0x0B  wind speed                 val="6.22 knots"
+//     0x0C  wind gust                  val="7.39 knots"
+//     0x19  wind gust max daily        val="8.55 knots"
+//     0x15  solar radiation            val="35.91 W/m2"
+//     0x16  UV index                   val="2.4"
+//     0x17  lightning strike count     val="0"
+//     0x6D  lightning distance         val="357"  (km, when WH57 present)
 //
-//   piezoRain section (WS90 piezo rain sensor):
-//     rrain_piezo   rain rate           mm/hr or in/hr (hub configured)
-//     srain_piezo   rain event total    mm or in
-//     0x0D          daily rain          mm
-//     0x0E          rain rate           mm/hr
-//     0x7C          hourly rain         mm
-//     0x10          weekly rain         mm
-//     0x11          monthly rain        mm
-//     0x12          yearly rain         mm
-//     ws90cap_volt  capacitor voltage   V  (solar charged)
-//     wh90batt      battery voltage     V  (backup AA)
-//     ws90_ver      firmware version
+//   piezoRain: array of {id, val} — val may include unit string
+//     srain_piezo   rain event total    val="0"
+//     0x0D          daily rain          val="0.0 mm"
+//     0x0E          rain rate           val="0.0 mm/Hr"
+//     0x7C          hourly rain         val="0.0 mm"
+//     0x10          weekly rain         val="0.0 mm"
+//     0x11          monthly rain        val="37.4 mm"
+//     0x12          yearly rain         val="55.6 mm"
+//     0x13          extra entry with:   battery, voltage, ws90cap_volt, ws90_ver
 //
-//   indoor (from GW2000B itself):
-//     intemp        indoor temperature  °C
-//     inhumi        indoor humidity     %
-//     absbaro       absolute pressure   hPa
-//     relbaro       relative pressure   hPa
+//   wh25: array with one entry (GW2000B built-in WH25 sensor):
+//     intemp        indoor temperature  "24.1"  unit="C"
+//     inhumi        indoor humidity     "43%"
+//     abs           absolute pressure   "1012.9 hPa"
+//     rel           relative pressure   "1012.9 hPa"
 
 const http = require('http');
 
@@ -85,7 +82,7 @@ module.exports = function (app) {
 
   const DEG_TO_RAD = (d) => d * Math.PI / 180;
 
-  // Convert wind speed from whatever unit the hub reports to m/s (SignalK standard)
+  // Convert wind speed to m/s (SignalK standard)
   function windToMs(val, unit) {
     switch ((unit || '').toLowerCase().trim()) {
       case 'km/h':              return val / 3.6;
@@ -95,19 +92,33 @@ module.exports = function (app) {
     }
   }
 
-  // Convert temperature from whatever unit the hub reports to Kelvin (SignalK standard)
+  // Convert temperature to Kelvin (SignalK standard)
   function tempToK(val, unit) {
     if ((unit || '').trim() === '°F' || (unit || '').trim() === 'F') return (val - 32) * 5 / 9 + 273.15;
     return val + 273.15; // °C default
   }
 
-  // Convert pressure from whatever unit the hub reports to Pa (SignalK standard)
+  // Convert pressure to Pa (SignalK standard)
   function pressureToPa(val, unit) {
     switch ((unit || '').toLowerCase().trim()) {
+      case 'kpa':  return val * 1000;
       case 'inhg': return val * 3386.39;
       case 'mmhg': return val * 133.322;
       default:     return val * 100; // hPa default
     }
+  }
+
+  // Convert rain depth to m (SignalK standard)
+  function rainToM(val, unit) {
+    if ((unit || '').toLowerCase().trim() === 'in') return val * 0.0254;
+    return val / 1000; // mm → m default
+  }
+
+  // Convert rain rate to m/s (SignalK standard)
+  function rainRateToMs(val, unit) {
+    const u = (unit || '').toLowerCase().trim();
+    if (u === 'in/h' || u === 'in/hr') return val * 0.0254 / 3600;
+    return val / 3600000; // mm/hr → m/s default
   }
 
   // ── HTTP polling ──────────────────────────────────────────────────────────
@@ -144,53 +155,76 @@ module.exports = function (app) {
 
   // ── Field extraction helpers ──────────────────────────────────────────────
 
-  // GW2000B returns common list as an array of {id, val, unit} objects
-  // where id is a hex string like "0x02"
-  // Returns { map: {id → number}, units: {id → unit string} }
+  // GW2000B mixes two formats: {id, val, unit} and {id, val:"6.22 knots"}.
+  // This extracts a numeric value and unit string from either form.
+  function parseValAndUnit(item) {
+    if (item.unit !== undefined) {
+      return { val: parseFloat(item.val), unit: String(item.unit).trim() };
+    }
+    // Extract trailing unit from val string: "6.22 knots" → {val:6.22, unit:"knots"}
+    const m = String(item.val).trim().match(/^(-?[\d.]+)\s*(.*)$/);
+    if (m) return { val: parseFloat(m[1]), unit: m[2].trim() };
+    return { val: parseFloat(item.val), unit: '' };
+  }
+
+  // common_list is an array of {id, val, [unit]} — returns { map, units }
   function buildCommonMap(data) {
     const map = {};
     const units = {};
     const list = data?.common_list ?? [];
     for (const item of list) {
-      if (item.id !== undefined && item.val !== undefined) {
-        const n = parseFloat(item.val);
-        // Bug fix: filter NaN (GW2000B sends "--" for missing sensors)
-        if (!isNaN(n)) {
-          map[item.id]   = n;
-          units[item.id] = item.unit ?? '';
-        }
-      }
+      if (item.id === undefined || item.val === undefined) continue;
+      const { val, unit } = parseValAndUnit(item);
+      // Filter NaN — GW2000B sends "--" for missing sensors
+      if (!isNaN(val)) { map[item.id] = val; units[item.id] = unit; }
     }
     return { map, units };
   }
 
-  // piezoRain is an object with mixed named keys and hex-id keys
+  // piezoRain is an array of {id, val, ...extraFields}
+  // Extra scalar fields (ws90cap_volt, voltage, battery) are also extracted.
   function buildPiezoMap(data) {
-    const raw = data?.piezoRain ?? {};
     const map = {};
-    for (const [k, v] of Object.entries(raw)) {
-      const n = parseFloat(v);
-      if (!isNaN(n)) map[k] = n;
+    const units = {};
+    const raw = data?.piezoRain;
+    if (!raw) return { map, units };
+
+    // Handle both array format (observed) and flat-object format (backwards compat)
+    const list = Array.isArray(raw)
+      ? raw
+      : Object.entries(raw).map(([id, val]) => ({ id, val }));
+
+    for (const item of list) {
+      if (item.id !== undefined && item.val !== undefined) {
+        const { val, unit } = parseValAndUnit(item);
+        if (!isNaN(val)) { map[item.id] = val; units[item.id] = unit; }
+      }
+      // Extract extra scalar fields on this entry (ws90cap_volt, voltage, etc.)
+      for (const [k, v] of Object.entries(item)) {
+        if (k === 'id' || k === 'val') continue;
+        const n = parseFloat(v);
+        if (!isNaN(n)) { map[k] = n; units[k] = ''; }
+      }
     }
-    return map;
+    return { map, units };
   }
 
   // ── Data parsing and SignalK publishing ───────────────────────────────────
 
   function parseAndPublish(data, options) {
     const { map: common, units: commonUnits } = buildCommonMap(data);
-    const piezo  = buildPiezoMap(data);
-    const values  = [];
+    const { map: piezo, units: piezoUnits }   = buildPiezoMap(data);
+    const values = [];
 
     // ── Outdoor temperature & humidity ────────────────────────────────────
     if (common['0x02'] !== undefined)
-      values.push({ path: 'environment.outside.temperature',   value: tempToK(common['0x02'], commonUnits['0x02']) });
+      values.push({ path: 'environment.outside.temperature',          value: tempToK(common['0x02'], commonUnits['0x02']) });
 
     if (common['0x03'] !== undefined)
-      values.push({ path: 'environment.outside.dewPointTemperature', value: tempToK(common['0x03'], commonUnits['0x03']) });
+      values.push({ path: 'environment.outside.dewPointTemperature',  value: tempToK(common['0x03'], commonUnits['0x03']) });
 
     if (common['0x07'] !== undefined)
-      values.push({ path: 'environment.outside.humidity',      value: common['0x07'] / 100 });
+      values.push({ path: 'environment.outside.humidity',             value: common['0x07'] / 100 });
 
     // ── Wind ─────────────────────────────────────────────────────────────
     const windDir     = common['0x0A'];
@@ -199,16 +233,12 @@ module.exports = function (app) {
     const windGustMax = common['0x19'];
 
     if (windDir !== undefined) {
-      const path = options.windAsTrue
-        ? 'environment.wind.directionTrue'
-        : 'environment.wind.directionApparent';
+      const path = options.windAsTrue ? 'environment.wind.directionTrue' : 'environment.wind.directionApparent';
       values.push({ path, value: DEG_TO_RAD(windDir) });
     }
 
     if (windSpeed !== undefined) {
-      const path = options.windAsTrue
-        ? 'environment.wind.speedTrue'
-        : 'environment.wind.speedApparent';
+      const path = options.windAsTrue ? 'environment.wind.speedTrue' : 'environment.wind.speedApparent';
       values.push({ path, value: windToMs(windSpeed, commonUnits['0x0B']) });
     }
 
@@ -233,13 +263,13 @@ module.exports = function (app) {
       values.push({ path: 'environment.outside.lightningDistance', value: common['0x6D'] * 1000 }); // km→m
 
     // ── Rain (WS90 piezo sensor) ─────────────────────────────────────────
-    if (piezo['rrain_piezo'] !== undefined)
-      values.push({ path: 'environment.outside.rainRate',         value: piezo['rrain_piezo'] / 3600 }); // mm/hr→mm/s
+    // Rain rate is in 0x0E ("0.0 mm/Hr"), not rrain_piezo
+    if (piezo['0x0E'] !== undefined)
+      values.push({ path: 'environment.outside.rainRate',       value: rainRateToMs(piezo['0x0E'], piezoUnits['0x0E']) });
 
     if (piezo['srain_piezo'] !== undefined)
-      values.push({ path: 'environment.outside.rainEventTotal',   value: piezo['srain_piezo'] / 1000 }); // mm→m
+      values.push({ path: 'environment.outside.rainEventTotal', value: rainToM(piezo['srain_piezo'], piezoUnits['srain_piezo']) });
 
-    // Daily / hourly / weekly / monthly / yearly rain totals
     const rainFields = {
       '0x0D': 'environment.outside.rainDayTotal',
       '0x7C': 'environment.outside.rainHourTotal',
@@ -249,33 +279,36 @@ module.exports = function (app) {
     };
     for (const [id, path] of Object.entries(rainFields)) {
       if (piezo[id] !== undefined)
-        values.push({ path, value: piezo[id] / 1000 }); // mm→m
+        values.push({ path, value: rainToM(piezo[id], piezoUnits[id]) });
     }
 
-    // ── Indoor (GW2000B built-in sensor) ─────────────────────────────────
-    if (data?.indoor) {
-      const indoor = data.indoor;
-      if (indoor.temperature !== undefined)
-        values.push({ path: 'environment.inside.temperature', value: tempToK(parseFloat(indoor.temperature), indoor.temperature_unit) });
-      if (indoor.humidity !== undefined)
-        values.push({ path: 'environment.inside.humidity',    value: parseFloat(indoor.humidity) / 100 });
-    }
+    // ── Indoor + Pressure (GW2000B WH25 built-in sensor) ─────────────────
+    // API returns this as data.wh25[0] with fields: intemp, inhumi, abs, rel
+    const wh25 = Array.isArray(data?.wh25) ? data.wh25[0] : data?.wh25;
+    if (wh25) {
+      if (wh25.intemp !== undefined)
+        values.push({ path: 'environment.inside.temperature', value: tempToK(parseFloat(wh25.intemp), wh25.unit) });
 
-    // ── Barometric pressure ───────────────────────────────────────────────
-    if (data?.pressure) {
-      const pressure = data.pressure;
-      if (pressure.absolute !== undefined)
-        values.push({ path: 'environment.outside.pressure',         value: pressureToPa(parseFloat(pressure.absolute), pressure.unit) });
-      if (pressure.relative !== undefined)
-        values.push({ path: 'environment.outside.pressureSeaLevel', value: pressureToPa(parseFloat(pressure.relative), pressure.unit) });
+      if (wh25.inhumi !== undefined)
+        values.push({ path: 'environment.inside.humidity',    value: parseFloat(wh25.inhumi) / 100 });
+
+      if (wh25.abs !== undefined) {
+        const { val, unit } = parseValAndUnit({ val: wh25.abs });
+        values.push({ path: 'environment.outside.pressure',         value: pressureToPa(val, unit) });
+      }
+      if (wh25.rel !== undefined) {
+        const { val, unit } = parseValAndUnit({ val: wh25.rel });
+        values.push({ path: 'environment.outside.pressureSeaLevel', value: pressureToPa(val, unit) });
+      }
     }
 
     // ── WS90 battery / capacitor voltage ─────────────────────────────────
     if (piezo['ws90cap_volt'] !== undefined)
-      values.push({ path: 'electrical.batteries.ws90.voltage', value: piezo['ws90cap_volt'] });
+      values.push({ path: 'electrical.batteries.ws90.voltage',       value: piezo['ws90cap_volt'] });
 
-    if (piezo['wh90batt'] !== undefined)
-      values.push({ path: 'electrical.batteries.ws90backup.voltage', value: piezo['wh90batt'] });
+    // Backup battery voltage field is 'voltage' in the observed API response
+    if (piezo['voltage'] !== undefined)
+      values.push({ path: 'electrical.batteries.ws90backup.voltage', value: piezo['voltage'] });
 
     if (values.length === 0) {
       app.debug('No recognised fields in GW2000B response — check field mapping');
