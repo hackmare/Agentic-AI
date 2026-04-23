@@ -44,6 +44,7 @@ module.exports = function (app) {
 
   let pollTimer = null;
   let stopped   = false;
+  let polling   = false; // prevent overlapping requests
 
   plugin.id          = 'signalk-ecowitt-gw2000';
   plugin.name        = 'Ecowitt GW2000B + WS90 Weather Station';
@@ -168,8 +169,12 @@ module.exports = function (app) {
           res.resume(); // drain so socket is reused
           return reject(new Error(`HTTP ${res.statusCode} from GW2000B`));
         }
+        const MAX_BODY = 100 * 1024; // 100 KB — guard against runaway responses
         let body = '';
-        res.on('data', (chunk) => { body += chunk; });
+        res.on('data', (chunk) => {
+          body += chunk;
+          if (body.length > MAX_BODY) res.destroy(new Error(`Response exceeded ${MAX_BODY} bytes`));
+        });
         // Bug fix: handle errors emitted on the response (e.g. connection reset mid-transfer)
         res.on('error', reject);
         res.on('end', () => {
@@ -318,11 +323,15 @@ module.exports = function (app) {
     // API returns this as data.wh25[0] with fields: intemp, inhumi, abs, rel
     const wh25 = Array.isArray(data?.wh25) ? data.wh25[0] : data?.wh25;
     if (wh25) {
-      if (wh25.intemp !== undefined)
-        values.push({ path: 'environment.inside.temperature', value: tempToK(parseFloat(wh25.intemp), wh25.unit) });
+      if (wh25.intemp !== undefined) {
+        const v = tempToK(parseFloat(wh25.intemp), wh25.unit);
+        if (!isNaN(v)) values.push({ path: 'environment.inside.temperature', value: v });
+      }
 
-      if (wh25.inhumi !== undefined)
-        values.push({ path: 'environment.inside.humidity',    value: parseFloat(wh25.inhumi) / 100 });
+      if (wh25.inhumi !== undefined) {
+        const v = parseFloat(wh25.inhumi) / 100;
+        if (!isNaN(v)) values.push({ path: 'environment.inside.humidity', value: v });
+      }
 
       if (wh25.abs !== undefined) {
         const { val, unit } = parseValAndUnit({ val: wh25.abs });
@@ -369,6 +378,8 @@ module.exports = function (app) {
   // ── Poll loop ─────────────────────────────────────────────────────────────
 
   async function poll(options) {
+    if (polling) { app.debug('Skipping poll — previous request still in flight'); return; }
+    polling = true;
     try {
       const data = await fetchLiveData(options);
       if (stopped) return; // plugin stopped while request was in-flight
@@ -378,6 +389,8 @@ module.exports = function (app) {
       if (stopped) return;
       app.error(`GW2000B poll error: ${err.message}`);
       app.setPluginError(err.message);
+    } finally {
+      polling = false;
     }
   }
 
