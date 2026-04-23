@@ -78,6 +78,38 @@ module.exports = function (app) {
     },
   };
 
+  // ── Metadata ──────────────────────────────────────────────────────────────
+  // Published once at startup so SignalK knows units and descriptions for all paths.
+
+  const METADATA = [
+    { path: 'environment.outside.temperature',          value: { units: 'K',    description: 'Outside air temperature' } },
+    { path: 'environment.outside.dewPointTemperature',  value: { units: 'K',    description: 'Outside dew point temperature' } },
+    { path: 'environment.outside.humidity',             value: { units: 'ratio', description: 'Outside relative humidity (0–1)' } },
+    { path: 'environment.inside.temperature',           value: { units: 'K',    description: 'Indoor air temperature (GW2000B WH25)' } },
+    { path: 'environment.inside.humidity',              value: { units: 'ratio', description: 'Indoor relative humidity (GW2000B WH25)' } },
+    { path: 'environment.outside.pressure',             value: { units: 'Pa',   description: 'Absolute atmospheric pressure' } },
+    { path: 'environment.outside.pressureSeaLevel',     value: { units: 'Pa',   description: 'Sea-level atmospheric pressure' } },
+    { path: 'environment.wind.directionApparent',       value: { units: 'rad',  description: 'Apparent wind direction' } },
+    { path: 'environment.wind.directionTrue',           value: { units: 'rad',  description: 'True wind direction' } },
+    { path: 'environment.wind.speedApparent',           value: { units: 'm/s',  description: 'Apparent wind speed' } },
+    { path: 'environment.wind.speedTrue',               value: { units: 'm/s',  description: 'True wind speed' } },
+    { path: 'environment.wind.gustSpeed',               value: { units: 'm/s',  description: 'Wind gust speed' } },
+    { path: 'environment.wind.gustSpeedMaxDay',         value: { units: 'm/s',  description: 'Maximum daily wind gust speed' } },
+    { path: 'environment.outside.solarRadiation',       value: { units: 'W/m²', description: 'Solar radiation' } },
+    { path: 'environment.outside.uvIndex',              value: { units: '',     description: 'UV index (0–16)' } },
+    { path: 'environment.outside.lightningStrikeCount', value: { units: '',     description: 'Lightning strike count' } },
+    { path: 'environment.outside.lightningDistance',    value: { units: 'm',    description: 'Distance to nearest lightning strike' } },
+    { path: 'environment.outside.rainRate',             value: { units: 'm/s',  description: 'Precipitation rate' } },
+    { path: 'environment.outside.rainEventTotal',       value: { units: 'm',    description: 'Precipitation total for current event' } },
+    { path: 'environment.outside.rainDayTotal',         value: { units: 'm',    description: 'Daily precipitation total' } },
+    { path: 'environment.outside.rainHourTotal',        value: { units: 'm',    description: 'Hourly precipitation total' } },
+    { path: 'environment.outside.rainWeekTotal',        value: { units: 'm',    description: 'Weekly precipitation total' } },
+    { path: 'environment.outside.rainMonthTotal',       value: { units: 'm',    description: 'Monthly precipitation total' } },
+    { path: 'environment.outside.rainYearTotal',        value: { units: 'm',    description: 'Yearly precipitation total' } },
+    { path: 'electrical.batteries.ws90.voltage',        value: { units: 'V',    description: 'WS90 solar capacitor voltage' } },
+    { path: 'electrical.batteries.ws90backup.voltage',  value: { units: 'V',    description: 'WS90 backup battery voltage' } },
+  ];
+
   // ── Unit conversions ──────────────────────────────────────────────────────
 
   const DEG_TO_RAD = (d) => d * Math.PI / 180;
@@ -310,6 +342,14 @@ module.exports = function (app) {
     if (piezo['voltage'] !== undefined)
       values.push({ path: 'electrical.batteries.ws90backup.voltage', value: piezo['voltage'] });
 
+    // Log any API sections not handled by this plugin — useful for adding new sensors
+    const knownSections = new Set(['common_list', 'piezoRain', 'wh25', 'debug']);
+    for (const section of Object.keys(data)) {
+      if (!knownSections.has(section)) {
+        app.debug(`Unhandled API section '${section}': ${JSON.stringify(data[section]).slice(0, 200)}`);
+      }
+    }
+
     if (values.length === 0) {
       app.debug('No recognised fields in GW2000B response — check field mapping');
       app.debug('Raw response: ' + JSON.stringify(data).slice(0, 500));
@@ -357,6 +397,9 @@ module.exports = function (app) {
 
     app.debug(`Starting — polling http://${options.host}:${options.port}/get_livedata_info every ${options.pollInterval}s`);
     app.setPluginStatus(`Connecting to ${options.host}…`);
+
+    // Publish metadata once so SignalK knows units/descriptions for all paths
+    app.handleMessage(plugin.id, { updates: [{ meta: METADATA }] });
 
     // Poll immediately, then on interval
     poll(options);
