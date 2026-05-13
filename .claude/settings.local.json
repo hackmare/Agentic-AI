@@ -3,7 +3,19 @@
     "allow": [
       "WebFetch(domain:raw.githubusercontent.com)",
       "WebFetch(domain:github.com)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(ssh -i '~/.ssh/roitsystems' -o StrictHostKeyChecking=no deploy@159.203.12.101 ' *)",
+      "Bash(rsync -avz -e 'ssh -i ~/.ssh/roitsystems -o StrictHostKeyChecking=no' /Users/morgane/github/roitsystems-infra/api/src/index.ts deploy@159.203.12.101:/home/deploy/roitsystems-infra/api/src/index.ts)",
+      "Bash(ssh -i ~/.ssh/roitsystems -o StrictHostKeyChecking=no deploy@159.203.12.101 \"docker logs roitsystems-infra-api-1 2>&1\")",
+      "Bash(npm test *)",
+      "Bash(git -C /Users/morgane/github/roitsystems.ca diff --name-only HEAD)",
+      "Bash(git -C /Users/morgane/github/roitsystems.ca status --short)",
+      "Bash(git -C /Users/morgane/github/roitsystems-infra diff --name-only HEAD)",
+      "Bash(git -C /Users/morgane/github/roitsystems-infra status --short)",
+      "Bash(git -C /Users/morgane/github/roitsystems.ca ls-files --others --exclude-standard)",
+      "Bash(git -C /Users/morgane/github/roitsystems-infra ls-files --others --exclude-standard)",
+      "Bash(gh auth *)",
+      "Bash(rsync -avz --exclude=.git --exclude=node_modules -e 'ssh -i ~/.ssh/roitsystems -o StrictHostKeyChecking=no' /Users/morgane/github/roitsystems-infra/ deploy@159.203.12.101:/home/deploy/roitsystems-infra/)"
     ]
   }
 }

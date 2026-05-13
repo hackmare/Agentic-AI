@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ssh -i '~/.ssh/roitsystems' -o StrictHostKeyChecking=no deploy@159.203.12.101 ' *)",
+      "Bash(ssh -i ~/.ssh/roitsystems -o StrictHostKeyChecking=no deploy@159.203.12.101 \"docker logs roitsystems-infra-caddy-1 2>&1 | tail -15\")",
+      "Bash(curl -sf https://pubapi.roitsystems.ca/health)",
+      "Bash(curl -sf -X POST https://pubapi.roitsystems.ca/api/contact -H 'Content-Type: application/json' -d '{\"name\":\"Morgane\",\"email\":\"m.oger@roitsystems.ca\",\"subject\":\"Live test\",\"message\":\"First real submission through the public HTTPS endpoint.\"}')",
+      "Bash(curl -sI https://pubapi.roitsystems.ca/health)",
+      "Read(//Users/morgane/github/roitsystems.ca/**)",
+      "Bash(doctl apps *)",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); [print\\(dom\\) for dom in d.get\\('app',{}\\).get\\('spec',{}\\).get\\('domains',[]\\) or [d.get\\('app',{}\\).get\\('default_ingress','no domains'\\)]]\")",
+      "Bash(python3 -c ' *)",
+      "Bash(rsync -avz -e 'ssh -i ~/.ssh/roitsystems -o StrictHostKeyChecking=no' /Users/morgane/github/roitsystems-infra/api/src/ deploy@159.203.12.101:/home/deploy/roitsystems-infra/api/src/)",
+      "Bash(curl -sI https://pubapi.roitsystems.ca/admin)",
+      "Bash(ssh -i ~/.ssh/roitsystems -o StrictHostKeyChecking=no deploy@159.203.12.101 \"grep ^ADMIN_TOKEN /home/deploy/roitsystems-infra/.env\")"
+    ],
+    "additionalDirectories": [
+      "/Users/morgane/github/roitsystems.ca/.do"
+    ]
+  }
+}
