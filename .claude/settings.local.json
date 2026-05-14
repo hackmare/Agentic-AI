@@ -15,7 +15,11 @@
       "Bash(git -C /Users/morgane/github/roitsystems.ca ls-files --others --exclude-standard)",
       "Bash(git -C /Users/morgane/github/roitsystems-infra ls-files --others --exclude-standard)",
       "Bash(gh auth *)",
-      "Bash(rsync -avz --exclude=.git --exclude=node_modules -e 'ssh -i ~/.ssh/roitsystems -o StrictHostKeyChecking=no' /Users/morgane/github/roitsystems-infra/ deploy@159.203.12.101:/home/deploy/roitsystems-infra/)"
+      "Bash(rsync -avz --exclude=.git --exclude=node_modules -e 'ssh -i ~/.ssh/roitsystems -o StrictHostKeyChecking=no' /Users/morgane/github/roitsystems-infra/ deploy@159.203.12.101:/home/deploy/roitsystems-infra/)",
+      "Bash(find ~ -maxdepth 3 -name \"*morganeoger*\" -o -name \"*morganeoger.ca*\" 2>/dev/null | head -20)",
+      "Read(//Users/morgane/**)",
+      "Bash(pnpm update *)",
+      "Bash(pnpm audit *)"
     ]
   }
 }
