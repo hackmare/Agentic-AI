@@ -13,7 +13,12 @@
       "Bash(rsync -avz -e 'ssh -i ~/.ssh/roitsystems -o StrictHostKeyChecking=no' /Users/morgane/github/roitsystems-infra/api/src/ deploy@159.203.12.101:/home/deploy/roitsystems-infra/api/src/)",
       "Bash(curl -sI https://pubapi.roitsystems.ca/admin)",
       "Bash(ssh -i ~/.ssh/roitsystems -o StrictHostKeyChecking=no deploy@159.203.12.101 \"grep ^ADMIN_TOKEN /home/deploy/roitsystems-infra/.env\")",
-      "Bash(timeout 30 pnpm build)"
+      "Bash(timeout 30 pnpm build)",
+      "Bash(gh workflow *)",
+      "Bash(ssh -i ~/.ssh/id_claude_pi pi@openplotter.local 'cat ~/.signalk/node_modules/@signalk/charts-plugin/plugin/tileServer.js')",
+      "Bash(ssh -i ~/.ssh/id_claude_pi pi@openplotter.local *)",
+      "Bash(git clone https://github.com/hackmare/*)",
+      "Bash(git commit *)"
     ],
     "additionalDirectories": [
       "/Users/morgane/github/roitsystems.ca/.do"

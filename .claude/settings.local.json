@@ -19,7 +19,12 @@
       "Bash(find ~ -maxdepth 3 -name \"*morganeoger*\" -o -name \"*morganeoger.ca*\" 2>/dev/null | head -20)",
       "Read(//Users/morgane/**)",
       "Bash(pnpm update *)",
-      "Bash(pnpm audit *)"
+      "Bash(pnpm audit *)",
+      "Bash(ssh -i ~/.ssh/id_claude_pi pi@openplotter.local 'cat ~/.signalk/node_modules/@signalk/charts-plugin/plugin/index.js')",
+      "Bash(ssh -i ~/.ssh/id_claude_pi pi@openplotter.local 'cat ~/.signalk/node_modules/@signalk/charts-plugin/plugin/chartDownloader.js')",
+      "Bash(pnpm approve-builds *)",
+      "Bash(mkdir -p ~/morgane/deployed)",
+      "Bash(tar -xzf ../signalk/signalk.tar.gz)"
     ]
   }
 }
